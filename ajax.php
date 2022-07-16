@@ -6,11 +6,11 @@ class AdminAjaxSlider {
 
         $result['status'] 	= 'error';
 
-        if(InputBuilder::Post()) {
+        if(Request::Post()) {
 
-            $name = InputBuilder::Post('name');
+            $name = Request::Post('name');
 
-            $type = InputBuilder::Post('type');
+            $type = Request::Post('type');
 
             $data = [
                 'name'          => $name,
@@ -35,9 +35,9 @@ class AdminAjaxSlider {
         $result['message'] 	= 'Xóa slider không thành công!';
         $result['status'] 	= 'error';
 
-        if(InputBuilder::Post()) {
+        if(Request::Post()) {
 
-            $id = InputBuilder::Post('id');
+            $id = Request::Post('id');
 
             $id = Gallery::delete($id);
 
@@ -55,9 +55,9 @@ class AdminAjaxSlider {
 
         $result['status'] 	= 'error';
 
-        if(InputBuilder::post()) {
+        if(Request::post()) {
 
-            $id = (int)InputBuilder::post('id');
+            $id = (int)Request::post('id');
 
             $slider = Gallery::get(Qr::set($id)->where('object_type', 'slider'));
 
@@ -84,9 +84,9 @@ class AdminAjaxSlider {
 
         $result['status'] 	= 'error';
 
-        if(InputBuilder::post()) {
+        if(Request::post()) {
 
-            $id = (int)InputBuilder::post('id');
+            $id = (int)Request::post('id');
 
             $slider = Gallery::get(Qr::set($id)->where('object_type', 'slider'));
 
@@ -124,14 +124,14 @@ class AdminAjaxSlider {
 
         $result['status'] 	= 'error';
 
-        if(InputBuilder::post()) {
+        if(Request::post()) {
 
-            $post = InputBuilder::post();
+            $post = Request::post();
 
             if(have_posts($post)) {
 
                 //Lấy id slider
-                $id = (int)InputBuilder::post('sliderId');
+                $id = (int)Request::post('sliderId');
 
                 $gallery = Gallery::get(Qr::set($id)->where('object_type', 'slider'));
 
@@ -159,11 +159,11 @@ class AdminAjaxSlider {
 
         $result['status'] 	= 'error';
 
-        if(InputBuilder::post()) {
+        if(Request::post()) {
 
-            $id = (int)InputBuilder::post('id');
+            $id = (int)Request::post('id');
 
-            $sliderType = InputBuilder::post('sliderType');
+            $sliderType = Request::post('sliderType');
 
             $slider = Slider::list($sliderType);
 
@@ -192,11 +192,11 @@ class AdminAjaxSlider {
 
         $result['status'] 	= 'error';
 
-        if(InputBuilder::post()) {
+        if(Request::post()) {
 
-            $id = (int)InputBuilder::post('id');
+            $id = (int)Request::post('id');
 
-            $sliderType = InputBuilder::post('type');
+            $sliderType = Request::post('type');
 
             $slider = Slider::list($sliderType);
 
@@ -231,9 +231,9 @@ class AdminAjaxSlider {
 
         $result['status'] 	= 'error';
 
-        if(InputBuilder::post()) {
+        if(Request::post()) {
 
-            $slider_item_order = InputBuilder::post('slider_item_order', ['type' => 'int']);
+            $slider_item_order = Request::post('slider_item_order', ['type' => 'int']);
 
             if(have_posts($slider_item_order)) {
 
@@ -258,9 +258,9 @@ class AdminAjaxSlider {
 
         $result['status'] 	= 'error';
 
-        if(InputBuilder::post()) {
+        if(Request::post()) {
 
-            $id = (int)InputBuilder::post('id');
+            $id = (int)Request::post('id');
 
             $item = Gallery::getItem($id);
 

@@ -13,18 +13,18 @@ class SliderRevolution {
 
         $galleryItem = [
             'id'    => $item->id,
-            'value' => InputBuilder::post('value')
+            'value' => Request::post('value')
         ];
 
         $galleryItemMeta = [
-            'name'=> InputBuilder::post('name'),
-            'url' => InputBuilder::post('url'),
+            'name'=> Request::post('name'),
+            'url' => Request::post('url'),
         ];
 
         foreach (Language::list() as $key => $lang) {
             if($key == Language::default()) continue;
             $name = 'name_'.$key;
-            $galleryItemMeta[$name] = InputBuilder::post($name);
+            $galleryItemMeta[$name] = Request::post($name);
         }
 
         $errors = Gallery::insertItem($galleryItem);
@@ -362,11 +362,11 @@ class SliderRevolutionAjax {
 
         $result['status'] 	= 'error';
 
-        if(InputBuilder::post()) {
+        if(Request::post()) {
 
-            $caption_key = InputBuilder::post('caption_key');
+            $caption_key = Request::post('caption_key');
 
-            $id = InputBuilder::post('id');
+            $id = Request::post('id');
 
             $caption = SliderRevolutionHtml::getCaptions($caption_key, $id);
 

@@ -7,14 +7,14 @@ class AdminSlider {
         Admin::asset()->location('footer')->add('slider', Path::plugin('slider').'/assets/js/slider-script.js');
     }
     static function slider(): void {
-        $view = InputBuilder::get('view');
+        $view = Request::get('view');
 
         if(empty($view)) {
             $sliders = Gallery::gets(Qr::set('object_type', 'slider'));
             include_once 'admin/views/index.php';
         }
         else if($view == 'detail') {
-            $id = (int)InputBuilder::get('id');
+            $id = (int)Request::get('id');
             $slider = Gallery::get(Qr::set('id', $id)->where('object_type', 'slider'));
             $items = Gallery::getsItem(Qr::set('group_id', $id)->where('object_type', 'slider')->orderBy('order'));
             include_once 'admin/views/detail.php';

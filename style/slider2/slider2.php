@@ -15,10 +15,10 @@ class SliderWithTitle {
     }
     static function optionsSave($slider): bool {
         $sliderOptions = [
-            'sliderTxtType' => InputBuilder::post('sliderTxtType'),
-            'sliderTxtBg' => InputBuilder::post('sliderTxtBg'),
-            'sliderTxtColor' => InputBuilder::post('sliderTxtColor'),
-            'sliderTxtActive' => InputBuilder::post('sliderTxtActive'),
+            'sliderTxtType' => Request::post('sliderTxtType'),
+            'sliderTxtBg' => Request::post('sliderTxtBg'),
+            'sliderTxtColor' => Request::post('sliderTxtColor'),
+            'sliderTxtActive' => Request::post('sliderTxtActive'),
         ];
         Metadata::update('slider', $slider->id, 'options', $sliderOptions);
         return true;
@@ -31,18 +31,18 @@ class SliderWithTitle {
 
         $galleryItem = [
             'id'    => $item->id,
-            'value' => InputBuilder::post('value')
+            'value' => Request::post('value')
         ];
 
         $galleryItemMeta = [
-            'name'=> InputBuilder::post('name'),
-            'url' => InputBuilder::post('url'),
+            'name'=> Request::post('name'),
+            'url' => Request::post('url'),
         ];
 
         foreach (Language::list() as $key => $lang) {
             if($key == Language::default()) continue;
             $name = 'name_'.$key;
-            $galleryItemMeta[$name] = InputBuilder::post($name);
+            $galleryItemMeta[$name] = Request::post($name);
         }
 
         $errors = Gallery::insertItem($galleryItem);
@@ -131,18 +131,10 @@ class SliderWithTitleHtml {
                 $.each($('.js_slider_title'), function (index, element) {
                     let options = $(this).data('options');
                     let sliderId = $(this).data('id');
-                    if(typeof options.ratioHeight == 'undefined') options.ratioHeight = 1;
-                    if(typeof options.ratioWidth == 'undefined') options.ratioWidth = 3;
-                    if(typeof options.numberItem == 'undefined' || options.numberItem > 5) options.numberItem = 5;
-                    options.numberItem -= 1;
-
                     let sliderWidth = $(this).width();
                     let sliderHeight = Math.ceil(sliderWidth*(parseFloat(options.ratioHeight)/parseFloat(options.ratioWidth)));
 
                     $(this).find('.js_slider_title_list .item').css('height', sliderHeight+'px');
-
-                    console.log(sliderWidth);
-                    console.log(sliderHeight);
 
                     $(window).resize(function () {
                         sliderWidth = $(this).width();
@@ -171,7 +163,7 @@ class SliderWithTitleHtml {
                         sliderMain.slick('slickPrev'); return false;
                     });
                     sliderThumb.slick({
-                        slidesToShow: options.numberItem,
+                        slidesToShow: 5,
                         slidesToScroll: 1,
                         asNavFor: '#js_slider_title_list_'  + sliderId,
                         focusOnSelect: true,
