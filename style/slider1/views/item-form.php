@@ -5,15 +5,15 @@ SliderRevolution::assetsEditor();
 <div role="tabpanel">
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
-        <li class="active" > <a href="#bg" role="tab" data-toggle="tab">Background</a> </li>
-        <li class=""><a href="#anima" role="anima" data-toggle="tab">Hiệu ứng</a> </li>
-        <li class=""><a href="#caption" role="caption" data-toggle="tab">Captions</a> </li>
+        <li class="" > <a href="#bg" class="active" role="tab" data-bs-toggle="tab">Background</a> </li>
+        <li class=""><a href="#anima" role="anima" data-bs-toggle="tab">Hiệu ứng</a> </li>
+        <li class=""><a href="#caption" role="caption" data-bs-toggle="tab">Captions</a> </li>
     </ul>
 
     <!-- Tab panes -->
     <div class="tab-content">
         <!-- Images -->
-        <div role="tabpanel" class="tab-pane active" id="bg">
+        <div role="tabpanel" class="tab-pane active m-2" id="bg">
             <div id="bg_type_image">
                 <?php
                 $Form = new FormBuilder();
@@ -32,7 +32,7 @@ SliderRevolution::assetsEditor();
         </div>
 
         <!-- Animation -->
-        <div role="tabpanel" class="tab-pane" id="anima">
+        <div role="tabpanel" class="tab-pane m-2" id="anima">
             <div class="system">
                 <div class="system-tab"  style="padding:0;">
                     <ul class="nav nav-tabs" role="tablist" style="min-height: 416px;background-color: #f3f3f3;">
@@ -88,7 +88,7 @@ SliderRevolution::assetsEditor();
         </div>
 
         <!-- Caption -->
-        <div role="tabpanel" class="tab-pane system" id="caption">
+        <div role="tabpanel" class="tab-pane system m-2" id="caption">
             <div class="system-tab"  style="padding:0;width: 15%;">
                 <ul class="nav nav-tabs js_slider_item_caption__list" role="tablist" style="min-height: 420px;background-color: var(--content-bg); border-radius: 0;padding:0;">
                     <li class="">

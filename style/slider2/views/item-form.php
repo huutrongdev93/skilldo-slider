@@ -1,9 +1,9 @@
 <div role="tabpanel">
     <ul class="nav nav-tabs" role="tablist">
-        <li class="active"><a href="#bg" role="tab" data-toggle="tab">Background</a></li>
+        <li><a href="#bg" class="active" role="tab" data-bs-toggle="tab">Background</a></li>
     </ul>
     <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="bg">
+        <div role="tabpanel" class="tab-pane active m-2" id="bg">
             <div id="bg_type_image">
                 <?php
                 $Form = new FormBuilder();
