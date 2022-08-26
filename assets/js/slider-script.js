@@ -159,8 +159,18 @@ $(function () {
             if(response.status === 'success') {
                 $('#js_slider_item__edit').html(response.data);
                 load_image_review();
-                $('.item-color').colorpicker({ format: "rgba" });
-                $('.item-color-hexa').colorpicker({ format: "auto" });
+                $('.item-color input').spectrum({
+                    type: "color",
+                    showInput: true,
+                    showInitial: true,
+                    chooseText: "Chọn", cancelText: "Hủy"
+                });
+                $('.item-color-hexa input').spectrum({
+                    type: "component",
+                    showInput: true,
+                    showInitial: true,
+                    chooseText: "Chọn"
+                });
             }
             else {
                 show_message(response.message, response.status);

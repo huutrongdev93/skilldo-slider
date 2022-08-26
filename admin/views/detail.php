@@ -35,6 +35,12 @@
 <div class="box list-sliders">
     <div class="box-content" style="padding: 10px;position: relative; min-height: 300px" id="js_slider_item_box__edit">
         <?php echo Admin::loading();?>
+        <?php
+            $sliderClass = Slider::list($slider->options.'.class');
+            if(!empty($sliderClass) && method_exists($sliderClass, 'assetsAdmin')) {
+                $sliderClass::assetsAdmin();
+            }
+        ?>
         <form action="" id="js_slider_item__edit"></form>
     </div>
 </div>

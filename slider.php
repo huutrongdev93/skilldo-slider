@@ -5,7 +5,7 @@ Plugin class    : Slider
 Plugin uri      : http://sikido.vn
 Description     : Tạo và quản lý slider với nhiều hiệu ứng chuyển động.
 Author          : SKDSoftware Dev Team
-Version         : 3.0.0
+Version         : 3.0.1
  */
 const SLIDER_NAME = 'slider';
 

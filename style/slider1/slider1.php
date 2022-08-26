@@ -19,6 +19,10 @@ class SliderRevolution {
         $galleryItemMeta = [
             'name'=> Request::post('name'),
             'url' => Request::post('url'),
+            'data_transition'   => Request::post('data_transition'),
+            'data_slotamount'   => Request::post('data_slotamount'),
+            'data_masterspeed'  => Request::post('data_masterspeed'),
+            'caption_key'       => Request::post('caption_key'),
         ];
 
         foreach (Language::list() as $key => $lang) {
@@ -46,7 +50,6 @@ class SliderRevolution {
             'data_transition'   => Gallery::getItemMeta($item->id, 'data_transition', true),
             'data_slotamount'   => Gallery::getItemMeta($item->id, 'data_slotamount', true),
             'data_masterspeed'  => Gallery::getItemMeta($item->id, 'data_masterspeed', true),
-            'transition'        => Gallery::getItemMeta($item->id, 'transition', true),
             'caption_key'       => Gallery::getItemMeta($item->id, 'caption_key', true),
         ];
 
@@ -126,11 +129,16 @@ class SliderRevolution {
     }
     static function assetsEditor(): void {
         ?>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
         <link rel="stylesheet" type="text/css" href="<?= self::$path;?>src/css/navstylechange.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="<?= self::$path;?>src/editor/type/fontello.css">
         <link rel="stylesheet" type="text/css" href="<?= self::$path;?>src/editor/editor.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="<?= self::$path;?>src/css/style.css" media="screen" />
+        <script type="text/javascript" src="<?= self::$path;?>/src/editor/editor.js"></script>
+        <?php
+    }
+    static function assetsAdmin(): void {
+        ?>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
         <?php
     }
     static function demo($slotamount = 5, $masterspeed = 700): void {

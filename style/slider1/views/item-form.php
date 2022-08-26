@@ -34,13 +34,13 @@ SliderRevolution::assetsEditor();
         <!-- Animation -->
         <div role="tabpanel" class="tab-pane m-2" id="anima">
             <div class="system">
-                <div class="system-tab"  style="padding:0;">
+                <div class="system-tab" style="padding:0;">
                     <ul class="nav nav-tabs" role="tablist" style="min-height: 416px;background-color: #f3f3f3;">
-                        <li class="active"><a href="#Fade" data-toggle="tab">Flat Fade Transitions</a></li>
-                        <li class=""><a href="#Zoom" data-toggle="tab">Flat Zoom Transitions</a></li>
-                        <li class=""><a href="#Parallax" data-toggle="tab">Flat Parallax Transitions</a></li>
-                        <li class=""><a href="#Slide" data-toggle="tab">Flat Slide Transitions</a></li>
-                        <li class=""><a href="#Premium" data-toggle="tab">Premium Transitions</a></li>
+                        <li class="nav-item"><a href="#Fade" data-bs-toggle="tab" class="active show">Flat Fade Transitions</a></li>
+                        <li class="nav-item"><a href="#Zoom" data-bs-toggle="tab">Flat Zoom Transitions</a></li>
+                        <li class="nav-item"><a href="#Parallax" data-bs-toggle="tab">Flat Parallax Transitions</a></li>
+                        <li class="nav-item"><a href="#Slide" data-bs-toggle="tab">Flat Slide Transitions</a></li>
+                        <li class="nav-item"><a href="#Premium" data-bs-toggle="tab">Premium Transitions</a></li>
                     </ul>
                 </div>
             </div>
@@ -52,7 +52,7 @@ SliderRevolution::assetsEditor();
                         <div class="system-tab-content tab-content" style="float:none;">
                             <?php $list_anim = SliderRevolution::animation();?>
                             <?php foreach ($list_anim as $key => $data): ?>
-                                <div role="tabpanel" class="tab-pane <?= ($key == 'Fade')?'active':'';?>" id="<?= $key;?>">
+                                <div role="tabpanel" class="tab-pane fade <?= ($key == 'Fade')? 'active show':'';?>" id="<?= $key;?>">
                                     <ul>
                                         <li class="animchanger" data-anim="">Flat <?= $key;?> Transitions</li>
                                         <?php foreach ($data as $name => $value): ?>
@@ -160,6 +160,9 @@ SliderRevolution::assetsEditor();
         background-color: var(--content-bg);
         margin-bottom: 10px;
     }
+    .transition-selectbox, .jspContainer, .jspPane {
+        min-height:390px;
+    }
 </style>
 <script>
     $(function (){
@@ -177,8 +180,18 @@ SliderRevolution::assetsEditor();
                 if( response.status === 'success') {
                     $('#js_slider_item_caption__layer').html(response.data);
                     $('#js_slider_item_caption__demo').html(response.slider);
-                    $('.item-color').colorpicker({ format: "rgba" });
-                    $('.item-color-hexa').colorpicker({ format: "auto" });
+                    $('.item-color input').spectrum({
+                        type: "color",
+                        showInput: true,
+                        showInitial: true,
+                        chooseText: "Chọn", cancelText: "Hủy"
+                    });
+                    $('.item-color-hexa input').spectrum({
+                        type: "component",
+                        showInput: true,
+                        showInitial: true,
+                        chooseText: "Chọn"
+                    });
                 }
             });
         });
