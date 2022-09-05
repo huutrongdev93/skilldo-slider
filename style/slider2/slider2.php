@@ -7,6 +7,7 @@ class SliderWithTitle {
         $sliderOptions['sliderTxtBg'] = (!empty($sliderOptions['sliderTxtBg'])) ? $sliderOptions['sliderTxtBg'] : 'rgba(0,0,0,0.5)';
         $sliderOptions['sliderTxtColor'] = (!empty($sliderOptions['sliderTxtColor'])) ? $sliderOptions['sliderTxtColor'] : '#fff';
         $sliderOptions['sliderTxtActive'] = (!empty($sliderOptions['sliderTxtActive'])) ? $sliderOptions['sliderTxtActive'] : 'var(--theme-color)';
+        $sliderOptions['sliderTxtBgActive'] = (!empty($sliderOptions['sliderTxtBgActive'])) ? $sliderOptions['sliderTxtBgActive'] : $sliderOptions['sliderTxtBg'];
         return $sliderOptions;
     }
     static function optionsForm($slider): void {
@@ -19,6 +20,7 @@ class SliderWithTitle {
             'sliderTxtBg' => Request::post('sliderTxtBg'),
             'sliderTxtColor' => Request::post('sliderTxtColor'),
             'sliderTxtActive' => Request::post('sliderTxtActive'),
+            'sliderTxtBgActive' => Request::post('sliderTxtBgActive'),
         ];
         Metadata::update('slider', $slider->id, 'options', $sliderOptions);
         return true;
@@ -101,6 +103,7 @@ class SliderWithTitleHtml {
                 --slider-thumb-color:<?php echo $sliderOptions['sliderTxtColor'];?>;
                 --slider-thumb-color-active:<?php echo $sliderOptions['sliderTxtActive'];?>;
                 --slider-thumb-bg:<?php echo $sliderOptions['sliderTxtBg'];?>;
+                --slider-thumb-bg-active:<?php echo $sliderOptions['sliderTxtBgActive'];?>;
             }
         </style>
         <?php
@@ -203,7 +206,10 @@ class SliderWithTitleHtml {
                 color: var(--slider-thumb-color, #fff);
                 display: flex; align-items: center;
             }
-            .sliderWidthTitle .slider_list_thumb .slick-current.item .heading {
+            .sliderWidthTitle .slider_list_thumb .slick-current .item {
+                background-color:var(--slider-thumb-bg-active);
+            }
+            .sliderWidthTitle .slider_list_thumb .slick-current .item .heading {
                 color:var(--slider-thumb-color-active);
             }
             .sliderWidthTitle .slider_list_thumb .item {

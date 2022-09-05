@@ -35,15 +35,17 @@
     <div class="box">
         <h4 class="header" style="margin:0 0 10px 0; border-radius: 0;">THÊM SLIDER</h4>
         <form id="js_slider_form__add" autocomplete="off">
-            <?php echo Admin::loading();?>
-            <?php echo FormBuilder::render(['name' => 'name', 'label' => 'Tên Slider', 'value'=>'','type' => 'text']);?>
-            <?php
-            $options = [];
-            foreach (Slider::list() as $key => $slider) {
-                $options[$key] = [ 'label' => $slider['name'], 'img' => $slider['thumb']];
-            }
-            echo FormBuilder::render(['name' => 'type', 'label' => 'Loại Slider', 'value'=>'', 'type' => 'select-img', 'options' => $options])
-            ?>
+            <div class="m-3">
+                <?php echo Admin::loading();?>
+                <?php echo FormBuilder::render(['name' => 'name', 'label' => 'Tên Slider', 'value'=>'','type' => 'text']);?>
+                <?php
+                $options = [];
+                foreach (Slider::list() as $key => $slider) {
+                    $options[$key] = [ 'label' => $slider['name'], 'img' => $slider['thumb']];
+                }
+                echo FormBuilder::render(['name' => 'type', 'label' => 'Loại Slider', 'value'=>'', 'type' => 'select-img', 'options' => $options])
+                ?>
+            </div>
             <div class="slider-type"></div>
             <div class="text-right" style="margin-bottom: 10px">
                 <button class="btn-icon btn-blue"><i class="fa fa-plus-square"></i>Thêm</button>
