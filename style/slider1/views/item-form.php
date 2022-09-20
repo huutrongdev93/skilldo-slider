@@ -90,10 +90,10 @@ SliderRevolution::assetsEditor();
         <!-- Caption -->
         <div role="tabpanel" class="tab-pane system m-2" id="caption">
             <div class="system-tab"  style="padding:0;width: 15%;">
-                <ul class="nav nav-tabs js_slider_item_caption__list" role="tablist" style="min-height: 420px;background-color: var(--content-bg); border-radius: 0;padding:0;">
+                <ul class="nav nav-tabs js_slider_item_caption__list" role="tablist" style="min-height: 420px;background-color: var(--content-bg); border-radius: 0;padding:10px;">
                     <li class="">
                         <label for="layer_none">
-                            <input type="radio" name="caption_key" value="none" id="layer_none" <?php echo (empty($item->caption_key)) ? 'checked' : '';?>>Không sử dụng
+                            <input type="radio" name="caption_key" value="none" id="layer_none" <?php echo (empty($item->caption_key)) ? 'checked' : '';?>> Không sử dụng
                         </label>
                     </li>
                     <?php foreach (SliderRevolutionHtml::getCaptions() as $cap_key => $caption_value) { ?>

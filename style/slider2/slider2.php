@@ -8,6 +8,7 @@ class SliderWithTitle {
         $sliderOptions['sliderTxtColor'] = (!empty($sliderOptions['sliderTxtColor'])) ? $sliderOptions['sliderTxtColor'] : '#fff';
         $sliderOptions['sliderTxtActive'] = (!empty($sliderOptions['sliderTxtActive'])) ? $sliderOptions['sliderTxtActive'] : 'var(--theme-color)';
         $sliderOptions['sliderTxtBgActive'] = (!empty($sliderOptions['sliderTxtBgActive'])) ? $sliderOptions['sliderTxtBgActive'] : $sliderOptions['sliderTxtBg'];
+        $sliderOptions['sliderTxtFontSize'] = (!empty($sliderOptions['sliderTxtFontSize'])) ? $sliderOptions['sliderTxtFontSize'] : '14';
         return $sliderOptions;
     }
     static function optionsForm($slider): void {
@@ -21,6 +22,7 @@ class SliderWithTitle {
             'sliderTxtColor' => Request::post('sliderTxtColor'),
             'sliderTxtActive' => Request::post('sliderTxtActive'),
             'sliderTxtBgActive' => Request::post('sliderTxtBgActive'),
+            'sliderTxtFontSize' => Request::post('sliderTxtFontSize'),
         ];
         Metadata::update('slider', $slider->id, 'options', $sliderOptions);
         return true;
@@ -104,6 +106,7 @@ class SliderWithTitleHtml {
                 --slider-thumb-color-active:<?php echo $sliderOptions['sliderTxtActive'];?>;
                 --slider-thumb-bg:<?php echo $sliderOptions['sliderTxtBg'];?>;
                 --slider-thumb-bg-active:<?php echo $sliderOptions['sliderTxtBgActive'];?>;
+                --slider-thumb-font-size:<?php echo $sliderOptions['sliderTxtFontSize'];?>px;
             }
         </style>
         <?php
@@ -166,7 +169,7 @@ class SliderWithTitleHtml {
                         sliderMain.slick('slickPrev'); return false;
                     });
                     sliderThumb.slick({
-                        slidesToShow: 5,
+                        slidesToShow: 4,
                         slidesToScroll: 1,
                         asNavFor: '#js_slider_title_list_'  + sliderId,
                         focusOnSelect: true,
@@ -199,12 +202,17 @@ class SliderWithTitleHtml {
                 outline: none;
             }
             .sliderWidthTitle .slider_list_thumb .item .heading {
-                font-size: 15px; line-height: 25px;
+                font-size: var(--slider-thumb-font-size); line-height: calc(var(--slider-thumb-font-size) + var(--slider-thumb-font-size)*0.5);
                 text-align: center;
                 margin: 0;
-                height: 50px; overflow: hidden;
+                height: calc((var(--slider-thumb-font-size) + var(--slider-thumb-font-size)*0.5)*2); overflow: hidden;
                 color: var(--slider-thumb-color, #fff);
                 display: flex; align-items: center;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 2; /* number of lines to show */
+                line-clamp: 2;
+                -webkit-box-orient: vertical;
             }
             .sliderWidthTitle .slider_list_thumb .slick-current .item {
                 background-color:var(--slider-thumb-bg-active);

@@ -60,7 +60,7 @@
         <div class="modal-content">
             <div class="modal-body">
                 <form action="" id="js_slider_form__options" autocomplete="off">
-                    <div class="" id="sliderOptionsModal_content"></div>
+                    <div class="row" id="sliderOptionsModal_content"></div>
                     <div class="text-right">
                         <button class="btn-icon btn-blue"><i class="fa fa-plus-square"></i>Lưu</button>
                     </div>

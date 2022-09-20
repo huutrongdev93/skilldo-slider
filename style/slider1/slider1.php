@@ -25,6 +25,12 @@ class SliderRevolution {
             'caption_key'       => Request::post('caption_key'),
         ];
 
+        $galleryItemMeta['caption'] = [];
+
+        if(have_posts(Request::post('caption'))) {
+            $galleryItemMeta['caption'] = Request::post('caption');
+        }
+
         foreach (Language::list() as $key => $lang) {
             if($key == Language::default()) continue;
             $name = 'name_'.$key;

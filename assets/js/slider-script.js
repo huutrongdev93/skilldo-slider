@@ -14,7 +14,6 @@ $(function () {
             .on('submit','#js_slider_item__edit', this.itemSave)
             .on('click','.js_slider_item_caption__list li label', this.loadItemCap);
 
-
         if(typeof $('#js_slider_item__sort').html() != 'undefined') {
             Sortable.create(js_slider_item__sort, {
                 animation: 200,
@@ -191,7 +190,7 @@ $(function () {
             'sliderId' 	: sliderId,
         };
 
-        $.post(base+'/ajax', data, function(response) {}, 'json').done(function( response ) {
+        $.post(ajax, data, function(response) {}, 'json').done(function( response ) {
             show_message(response.message, response.status);
             if(response.status === 'success') {
                 window.location = base + '/plugins?page=slider&view=detail&id=' + sliderId;
