@@ -145,7 +145,7 @@
     }
 
     .select-img .checkbox {
-        width: 35%;
+        width: 32%; cursor: pointer;
     }
     .select-img .checkbox img {
         max-width: 100%!important; width: 400px;

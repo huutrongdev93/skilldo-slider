@@ -5,7 +5,7 @@ Plugin class    : Slider
 Plugin uri      : http://sikido.vn
 Description     : Tạo và quản lý slider với nhiều hiệu ứng chuyển động.
 Author          : SKDSoftware Dev Team
-Version         : 3.0.3
+Version         : 3.1.0
  */
 const SLIDER_NAME = 'slider';
 
@@ -38,6 +38,12 @@ class Slider {
                 'thumb' => SLIDER_PATH.'style/slider2/thumb.png',
                 'class' => 'SliderWithTitle',
                 'options' => true
+            ],
+            'slider3' => [
+                'name' => 'Slider 3',
+                'thumb' => SLIDER_PATH.'style/slider3/thumb.png',
+                'class' => 'SliderNoTitle',
+                'options' => false
             ]
         ];
         if($key != null) return Arr::get($slider, $key);
@@ -65,5 +71,4 @@ include_once 'ajax.php';
 include_once 'admin.php';
 include_once 'style/slider1/slider1.php';
 include_once 'style/slider2/slider2.php';
-
-
+include_once 'style/slider3/slider3.php';
