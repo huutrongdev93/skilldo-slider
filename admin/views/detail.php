@@ -38,7 +38,7 @@
 
 <div class="box list-sliders">
     <div class="box-content" style="padding: 10px;position: relative; min-height: 300px" id="js_slider_item_box__edit">
-        <?php echo Admin::loading();?>
+        <?php Admin::loading();?>
         <?php
             if(!empty($sliderClass) && method_exists($sliderClass, 'assetsAdmin')) {
                 $sliderClass::assetsAdmin();

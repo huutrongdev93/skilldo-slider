@@ -41,7 +41,7 @@
         <h4 class="header" style="margin:0 0 10px 0; border-radius: 0;">THÊM SLIDER</h4>
         <form id="js_slider_form__add" autocomplete="off">
             <div class="m-3">
-                <?php echo Admin::loading();?>
+                <?php Admin::loading();?>
                 <?php echo FormBuilder::render(['name' => 'name', 'label' => 'Tên Slider', 'value'=>'','type' => 'text']);?>
                 <?php
                 $options = [];
@@ -99,7 +99,7 @@
     }
     .slider-first-image {
         position: absolute;
-        top: 0px: left:0px;
+        top: 0: left:0;
         width: 100%;
         height: 100%;
     }
