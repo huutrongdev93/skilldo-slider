@@ -85,7 +85,7 @@ $(function () {
 
         $('#sliderOptionsModal .loading').show();
 
-        $('#sliderOptionsModal').modal('show');
+        $('.js_slider_options_box').show();
 
         $('#sliderOptionsModal #sliderOptionsModal_content').html('');
 

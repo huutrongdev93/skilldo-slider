@@ -44,6 +44,11 @@ class SliderNoTitle {
 
         return $errors;
     }
+
+	static function scriptAdmin(): void
+    {
+        include 'views/item-script.php';
+	}
     static function metaData($item): object {
         $option = [
             'url'           => Gallery::getItemMeta($item->id, 'url', true),
@@ -143,7 +148,7 @@ class SliderNoTitleHtml {
         static $calledCss = false; if ($calledCss) return;
         ?>
         <style>
-            .sliderNoTitle .slider_list_item .item img {
+            .sliderNoTitle .slider_list_item .sliderItem img {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;

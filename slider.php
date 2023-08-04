@@ -5,7 +5,7 @@ Plugin class    : Slider
 Plugin uri      : http://sikido.vn
 Description     : Tạo và quản lý slider với nhiều hiệu ứng chuyển động.
 Author          : SKDSoftware Dev Team
-Version         : 3.1.0
+Version         : 3.1.1
  */
 const SLIDER_NAME = 'slider';
 
@@ -13,7 +13,7 @@ define('SLIDER_PATH', Path::plugin(SLIDER_NAME).'/');
 
 class Slider {
 
-    private $name = 'Slider';
+    private string $name = 'Slider';
 
     function __construct() {}
 
@@ -51,17 +51,18 @@ class Slider {
     }
 
     static function render($sliderId, $options = null): void {
-
         $slider = Gallery::get(Qr::set('id', $sliderId)->where('object_type', 'slider'));
-
         if(have_posts($slider)) {
-
             $sliderClass = Slider::list($slider->options . '.class');
-
             if (class_exists($sliderClass)) {
                 $items = Gallery::getsItem(Qr::set('group_id', $sliderId)->where('object_type', 'slider')->orderBy('order'));
                 if (have_posts($items)) {
-                    $sliderClass::render($items, $slider, $options);
+                    if(!Device::isGoogleSpeed()) {
+                        $sliderClass::render($items, $slider, $options);
+                    }
+                    else {
+                        Template::img($items[0]->value, 'slider', ['css' => 'width:100%']);
+                    }
                 }
             }
         }

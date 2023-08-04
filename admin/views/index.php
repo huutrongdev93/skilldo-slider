@@ -1,33 +1,38 @@
-<div class="col-md-12">
-    <div class="box list-sliders">
-        <!-- .box-content -->
-        <div class="box-content" style="padding: 0;">
-            <h4 class="header" style="margin-top: 0;">Slider</h4>
-            <div class="box-list-sliders">
-                <?php foreach ($sliders as $key => $slider): $sliderType = Slider::list($slider->options); ?>
-                    <a href="<?php echo Url::admin('plugins?page=slider&view=detail&id='.$slider->id);?>">
-                        <div class="item tls-addnewslider">
-                            <span class="tls-firstslideimage mini-transparent" style="background-size: inherit; background-repeat: repeat;;background-image:url(https://vignette.wikia.nocookie.net/animal-jam-clans-1/images/5/57/Transparent_Background.png) "></span>
-                            <span class="tls-title-wrapper"><span class="tls-title"><?= $slider->name;?></span></span>
-                            <div class="tls-button">
-                                <button class="btn btn-red js_slider__delete" data-id="<?php echo $slider->id;?>" style="position: relative;top:5px;"><?php echo Admin::icon('delete');?></button>
-                                <?php if($sliderType['options'] == 'true') {?>
-                                <button class="btn btn-green js_slider__options" data-id="<?php echo $slider->id;?>" style="position: relative;top:5px;"><i class="fa-thin fa-gear"></i></button>
-                                <?php } ?>
-                            </div>
+<div class="ui-title-bar__group">
+	<h1 class="ui-title-bar__title">Slider</h1>
+	<div class="ui-title-bar__action"><button class="btn btn-blue" data-fancybox="" data-src="#hidden-content"><?php echo Admin::icon('add');?> Thêm mới slider</button></div>
+</div>
+<div class="box list-sliders">
+    <div class="box-content p-2">
+        <div class="sliders-list">
+            <?php foreach ($sliders as $key => $slider): $sliderType = Slider::list($slider->options); ?>
+                <a href="<?php echo Url::admin('plugins?page=slider&view=detail&id='.$slider->id);?>">
+                    <div class="item">
+                        <span class="slider-first-image" style="background-size: inherit; background-repeat: repeat;;background-image:url(<?php echo Path::plugin('slider').'/assets/images/Transparent_Background.webp';?>) "></span>
+                        <span class="slider-title-wrapper"><span class="slider-title"><?= $slider->name;?></span></span>
+                        <div class="slider-button">
+                            <button class="btn btn-red js_slider__delete" data-id="<?php echo $slider->id;?>" style="position: relative;top:5px;"><?php echo Admin::icon('delete');?></button>
+                            <?php if($sliderType['options'] == 'true') {?>
+                            <button class="btn btn-green js_slider__options" data-id="<?php echo $slider->id;?>" style="position: relative;top:5px;"><i class="fa-thin fa-gear"></i></button>
+                            <?php } ?>
                         </div>
-                    </a>
-                <?php endforeach ?>
-                <a href="javascript:;" data-fancybox="" data-src="#hidden-content">
-                    <div class="item tls-addnewslider">
-                        <span class="tls-new-icon-wrapper"><span class="slider_list_add_buttons add_new_slider_icon"></span></span>
-                        <span class="tls-title-wrapper"><span class="tls-title">New Slider</span></span>
                     </div>
                 </a>
-            </div>
+            <?php endforeach ?>
         </div>
-        <!-- /.box-content -->
     </div>
+</div>
+<div class="box js_slider_options_box" style="display: none">
+	<div class="box-content p-2">
+		<div id="sliderOptionsModal">
+			<form action="" id="js_slider_form__options" autocomplete="off">
+				<div class="row" id="sliderOptionsModal_content"></div>
+				<div class="text-right">
+					<button class="btn-icon btn-blue"><?php echo Admin::icon('save');?> Lưu</button>
+				</div>
+			</form>
+		</div>
+	</div>
 </div>
 
 <!-- popup thêm menu -->
@@ -54,43 +59,30 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="sliderOptionsModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <form action="" id="js_slider_form__options" autocomplete="off">
-                    <div class="row" id="sliderOptionsModal_content"></div>
-                    <div class="text-right">
-                        <button class="btn-icon btn-blue"><i class="fa fa-plus-square"></i>Lưu</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
 <style>
-    .wrapper .content .page-content { margin-top: 5px; }
-    .box-list-sliders { padding:10px; }
-    .list-sliders .item {
+	.sliders-list {
+		display: flex; gap:10px;
+	}
+    .sliders-list .item {
         position: relative;
-        display: inline-block;
-        margin-bottom: 10px;
         width: 220px;
         height: 160px;
-        margin-right: 10px;
-    }
-    .tls-addnewslider {
         border: 1px dashed #ddd;
         background: transparent;
         box-sizing: border-box;
         overflow: hidden;
+	    border-radius: 5px;
     }
-    .tls-title-wrapper {
+    .sliders-list .item:hover, .sliders-list .item.active {
+        border: 1px solid #242424;
+    }
+    .sliders-list .item:hover .slider-title, .sliders-list .item.active .slider-title {
+        color:#fff;
+    }
+    .slider-title-wrapper {
         vertical-align: middle;
         position: absolute;
-        bottom: 0px;
+        bottom: 0;
         color: #fff;
         padding: 5px 10px;
         width: 100%;
@@ -98,52 +90,19 @@
         background: #eee;
         box-sizing: border-box;
     }
-    .tls-title, .tls-title a {
+    .slider-title, .slider-title a {
         color: #555;
         text-decoration: none;
         font-size: 11px;
         line-height: 20px;
         font-weight: 600;
     }
-    .tls-addnewslider .tls-new-icon-wrapper {
-        position: absolute;
-        top: 0px;
-        width: 100%;
-        height: 100%;
-        display: block;
-        text-align: center;
-        font-size: 35px;
-    }
-    .slider_list_add_buttons {
-        display: block;
-        position: absolute;
-        left: 0px,top:0px;
-        width: 100%;
-        height: 100%;
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-size: 40px 40px;
-        margin-top: -10px;
-    }
-    .tls-firstslideimage {
+    .slider-first-image {
         position: absolute;
         top: 0px: left:0px;
         width: 100%;
         height: 100%;
     }
-    .add_new_slider_icon {
-        background-image: url('<?php echo plugin_dir_path('slider').'assets/images/new_slider.png';?>');
-    }
-    .tls-addnewslider:hover, .tls-addnewslider.active {
-        border: 1px solid #242424;
-    }
-    .tls-addnewslider:hover .tls-title-wrapper, .tls-addnewslider.active .tls-title-wrapper {
-        background: #252525;
-    }
-    .tls-addnewslider:hover .tls-title, .tls-addnewslider.active .tls-title {
-        color:#fff;
-    }
-
     .select-img .checkbox {
         width: 32%; cursor: pointer;
     }

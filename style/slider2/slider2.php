@@ -187,6 +187,9 @@ class SliderWithTitleHtml {
         static $calledCss = false; if ($calledCss) return;
         ?>
         <style>
+            .sliderWidthTitle .slider_list_item .item {
+                display:block!important;
+            }
             .sliderWidthTitle .slider_list_item .item img {
                 width: 100%;
                 height: 100%;

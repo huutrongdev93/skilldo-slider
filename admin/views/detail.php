@@ -1,3 +1,7 @@
+<div class="ui-title-bar__group">
+	<h1 class="ui-title-bar__title">Slider <?php echo $slider->name;?></h1>
+	<a href="<?php echo Url::admin('plugins?page=slider');?>">Quay lại danh sách slider</a>
+</div>
 <div class="box list-sliders">
     <div class="box-content" style="padding: 10px;">
         <ul id="js_slider_item__sort" style="list-style: none;">
@@ -36,7 +40,6 @@
     <div class="box-content" style="padding: 10px;position: relative; min-height: 300px" id="js_slider_item_box__edit">
         <?php echo Admin::loading();?>
         <?php
-            $sliderClass = Slider::list($slider->options.'.class');
             if(!empty($sliderClass) && method_exists($sliderClass, 'assetsAdmin')) {
                 $sliderClass::assetsAdmin();
             }
@@ -163,3 +166,8 @@
     }
     .toolcontroll { width: 34px; }
 </style>
+<?php
+if(!empty($sliderClass) && method_exists($sliderClass, 'scriptAdmin')) {
+    $sliderClass::scriptAdmin();
+}
+?>

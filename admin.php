@@ -15,8 +15,9 @@ class AdminSlider {
         }
         else if($view == 'detail') {
             $id = (int)Request::get('id');
-            $slider = Gallery::get(Qr::set('id', $id)->where('object_type', 'slider'));
-            $items = Gallery::getsItem(Qr::set('group_id', $id)->where('object_type', 'slider')->orderBy('order'));
+            $slider         = Gallery::get(Qr::set('id', $id)->where('object_type', 'slider'));
+            $items          = Gallery::getsItem(Qr::set('group_id', $id)->where('object_type', 'slider')->orderBy('order'));
+            $sliderClass    = Slider::list($slider->options.'.class');
             include_once 'admin/views/detail.php';
         }
     }
