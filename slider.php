@@ -5,7 +5,7 @@ Plugin class    : Slider
 Plugin uri      : http://sikido.vn
 Description     : Tạo và quản lý slider với nhiều hiệu ứng chuyển động.
 Author          : SKDSoftware Dev Team
-Version         : 3.1.1
+Version         : 3.2.0
  */
 const SLIDER_NAME = 'slider';
 
@@ -21,8 +21,8 @@ class Slider {
 
     public function uninstall(): void {
         $model = model('group');
-        $model->delete(Qr::set('object_type', 'slider'));
-        $model->settable('galleries')->delete(Qr::set('object_type', 'slider'));
+        $model::delete(Qr::set('object_type', 'slider'));
+        $model->table('galleries')::delete(Qr::set('object_type', 'slider'));
     }
 
     static function list($key = null) {
@@ -46,7 +46,9 @@ class Slider {
                 'options' => false
             ]
         ];
+
         if($key != null) return Arr::get($slider, $key);
+
         return apply_filters('register_slider', $slider);
     }
 
@@ -55,7 +57,7 @@ class Slider {
         if(have_posts($slider)) {
             $sliderClass = Slider::list($slider->options . '.class');
             if (class_exists($sliderClass)) {
-                $items = Gallery::getsItem(Qr::set('group_id', $sliderId)->where('object_type', 'slider')->orderBy('order'));
+                $items = GalleryItem::gets(Qr::set('group_id', $sliderId)->where('object_type', 'slider')->orderBy('order'));
                 if (have_posts($items)) {
                     if(!Device::isGoogleSpeed()) {
                         $sliderClass::render($items, $slider, $options);

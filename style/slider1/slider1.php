@@ -1,73 +1,107 @@
 <?php
+
+use JetBrains\PhpStorm\NoReturn;
+
 class SliderRevolution {
     static string $path = SLIDER_PATH.'style/slider1/';
+
     static function itemForm($item): void {
+
         $item = SliderRevolution::metaData($item);
+
         if($item->caption_key != 'none') {
             $caption_key = $item->caption_key;
             $caption = SliderRevolutionHtml::getCaptions($caption_key, $item->id);
         }
-        include 'views/item-form.php';
+
+        $form = form();
+
+        $form->file('value', ['label' => 'Ảnh hoặc video'], $item->value);
+
+        $form->text('name', ['label' => 'Tiêu đề', 'note' => 'Dùng làm alt hình ảnh'], $item->name);
+
+        foreach (Language::list() as $key => $lang) {
+            if($key == Language::default()) continue;
+            $name = 'name_'.$key;
+            $form->text($name, ['label' => 'Tiêu đề ('.$lang['label'].')'], (!empty($item->$name)) ? $item->$name : '');
+        }
+
+        $form->text('url', ['label' => 'Liên kết'], $item->url);
+
+        $form = apply_filters('admin_slider_item_form_background', $form, $item);
+
+        SliderRevolutionHtml::assets();
+
+        SliderRevolution::assetsEditor();
+
+		Plugin::view('slider', 'admin/slider1/item-form', [
+            'form' => $form,
+            'item' => $item,
+            'animations' => SliderRevolution::animation(),
+            'caption_key' => $caption_key ?? '',
+            'caption' => $caption ?? '',
+		]);
     }
-    static function itemSave($item): int|array|SKD_Error {
+
+    static function itemSave($item, \SkillDo\Http\Request $request): int|array|SKD_Error {
 
         $galleryItem = [
             'id'    => $item->id,
-            'value' => Request::post('value')
+            'value' => $request->input('value')
         ];
 
         $galleryItemMeta = [
-            'name'=> Request::post('name'),
-            'url' => Request::post('url'),
-            'data_transition'   => Request::post('data_transition'),
-            'data_slotamount'   => Request::post('data_slotamount'),
-            'data_masterspeed'  => Request::post('data_masterspeed'),
-            'caption_key'       => Request::post('caption_key'),
+            'name'=> $request->input('name'),
+            'url' => $request->input('url'),
+            'data_transition'   => $request->input('data_transition'),
+            'data_slotamount'   => $request->input('data_slotamount'),
+            'data_masterspeed'  => $request->input('data_masterspeed'),
+            'caption_key'       => $request->input('caption_key'),
         ];
 
         $galleryItemMeta['caption'] = [];
 
-        if(have_posts(Request::post('caption'))) {
-            $galleryItemMeta['caption'] = Request::post('caption');
+        if(have_posts($request->input('caption'))) {
+            $galleryItemMeta['caption'] = $request->input('caption');
         }
 
         foreach (Language::list() as $key => $lang) {
             if($key == Language::default()) continue;
             $name = 'name_'.$key;
-            $galleryItemMeta[$name] = Request::post($name);
+            $galleryItemMeta[$name] = $request->input($name);
         }
 
-        $errors = Gallery::insertItem($galleryItem);
+        $errors = GalleryItem::insert($galleryItem);
 
         if(!is_skd_error($errors)) {
 
             foreach ($galleryItemMeta as $meta_key => $meta_value) {
-                Gallery::updateItemMeta($item->id, $meta_key, $meta_value);
+                GalleryItem::updateMeta($item->id, $meta_key, $meta_value);
             }
         }
 
         return $errors;
     }
+
     static function metaData($item): object {
 
         $option = [
-            'url'   => Gallery::getItemMeta($item->id, 'url', true),
-            'name'  => Gallery::getItemMeta($item->id, 'name', true),
-            'data_transition'   => Gallery::getItemMeta($item->id, 'data_transition', true),
-            'data_slotamount'   => Gallery::getItemMeta($item->id, 'data_slotamount', true),
-            'data_masterspeed'  => Gallery::getItemMeta($item->id, 'data_masterspeed', true),
-            'caption_key'       => Gallery::getItemMeta($item->id, 'caption_key', true),
+            'url'   => GalleryItem::getMeta($item->id, 'url', true),
+            'name'  => GalleryItem::getMeta($item->id, 'name', true),
+            'data_transition'   => GalleryItem::getMeta($item->id, 'data_transition', true),
+            'data_slotamount'   => GalleryItem::getMeta($item->id, 'data_slotamount', true),
+            'data_masterspeed'  => GalleryItem::getMeta($item->id, 'data_masterspeed', true),
+            'caption_key'       => GalleryItem::getMeta($item->id, 'caption_key', true),
         ];
 
         if(!Language::isDefault()) {
-            $name = Gallery::getItemMeta($item->id, 'name_'.Language::current(), true);
+            $name = GalleryItem::getMeta($item->id, 'name_'.Language::current(), true);
             if(!empty($name)) $option['name'] = $name;
         }
 
-        $item = (object)array_merge((array)$item, $option);
-
-        return $item;
+        return (object)array_merge((array)$item, $option);
     }
+
     static function animation( $key = '') {
 
         $list_anim['Fade'] = array(
@@ -133,153 +167,58 @@ class SliderRevolution {
 
         return (isset($list_anim[$key])) ? $list_anim[$key] : (($key == '') ? $list_anim : []);
     }
+
     static function assetsEditor(): void {
-        ?>
-        <link rel="stylesheet" type="text/css" href="<?= self::$path;?>src/css/navstylechange.css" media="screen" />
-        <link rel="stylesheet" type="text/css" href="<?= self::$path;?>src/editor/type/fontello.css">
-        <link rel="stylesheet" type="text/css" href="<?= self::$path;?>src/editor/editor.css" media="screen" />
-        <link rel="stylesheet" type="text/css" href="<?= self::$path;?>src/css/style.css" media="screen" />
-        <script type="text/javascript" src="<?= self::$path;?>/src/editor/editor.js"></script>
-        <?php
+        $assets = new AssetPosition('slider');
+        $assets->add('slider-edit', self::$path.'src/css/navstylechange.css', ['minify' => false]);
+        $assets->add('slider-edit', self::$path.'src/editor/type/fontello.css', ['minify' => false]);
+        $assets->add('slider-edit', self::$path.'src/editor/editor.css', ['minify' => false]);
+        $assets->add('slider-edit', self::$path.'src/css/style.css', ['minify' => false]);
+        $assets->add('slider-edit', self::$path.'src/editor/editor.js', ['minify' => false]);
+        $assets->styles();
+        $assets->scripts();
     }
+
     static function assetsAdmin(): void {
-        ?>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
-        <?php
+		$assets = new AssetPosition('slider');
+        $assets->add('tween-max', 'https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js', ['minify' => false]);
+        $assets->scripts();
     }
+
     static function demo($slotamount = 5, $masterspeed = 700): void {
+
         $slotamount  = (empty($slotamount)) ? 5 : $slotamount;
+
         $masterspeed = (empty($masterspeed)) ? 700 : $masterspeed;
-        ?>
-        <article class="spectaculus">
-            <!-- START REVOLUTION SLIDER 3.1 rev5 fullwidth mode -->
-            <div class="fullwidthbanner-container roundedcorners">
-                <div class="fullwidthbanner" >
-                    <ul>
-                        <li data-transition="fade" data-slotamount="5" data-masterspeed="700" >
-                            <img src="<?= self::$path;?>images-demo/bg1.jpg"   alt="slidebg1"  data-bgfit="cover" data-bgposition="left top" data-bgrepeat="no-repeat">
-                        </li>
-                        <li data-transition="fade" data-slotamount="5" data-masterspeed="700" >
-                            <img src="<?= self::$path;?>images-demo/bg2.jpg"   alt="slidebg1"  data-bgfit="cover" data-bgposition="left top" data-bgrepeat="no-repeat">
-                        </li>
-                        <li data-transition="fade" data-slotamount="5" data-masterspeed="700" >
-                            <img src="<?= self::$path;?>images-demo/bg3.jpg"  alt="slidebg1"  data-bgfit="cover" data-bgposition="left top" data-bgrepeat="no-repeat">
-                        </li>
-                        <li data-transition="fade" data-slotamount="5" data-masterspeed="700" >
-                            <img src="<?= self::$path;?>images-demo/bg4.jpg"  alt="slidebg1"  data-bgfit="cover" data-bgposition="left top" data-bgrepeat="no-repeat">
-                        </li>
-                    </ul>
-                    <div class="tp-bannertimer"></div>
-                </div>
-            </div>
-            <script type="text/javascript">
-                var revApi;
-                $(document).ready(function() {
-                    revApi = $('.fullwidthbanner').revolution({
-                        delay:15000,
-                        startwidth:1170,
-                        startheight:500,
-                        height:500,
-                        hideThumbs:10,
 
-                        thumbWidth:100,
-                        thumbHeight:50,
-                        thumbAmount:5,
-
-                        navigationType:"both",
-                        navigationArrows:"solo",
-                        navigationStyle:"round",
-
-                        touchenabled:"on",
-                        onHoverStop:"on",
-
-                        navigationHAlign:"center",
-                        navigationVAlign:"bottom",
-                        navigationHOffset:0,
-                        navigationVOffset:0,
-
-                        soloArrowLeftHalign:"left",
-                        soloArrowLeftValign:"center",
-                        soloArrowLeftHOffset:20,
-                        soloArrowLeftVOffset:0,
-
-                        soloArrowRightHalign:"right",
-                        soloArrowRightValign:"center",
-                        soloArrowRightHOffset:20,
-                        soloArrowRightVOffset:0,
-
-                        shadow:0,
-                        fullWidth:"on",
-                        fullScreen:"off",
-
-                        stopLoop:"on",
-                        stopAfterLoops:0,
-                        stopAtSlide:1,
-
-
-                        shuffle:"off",
-
-                        autoHeight:"off",
-                        forceFullWidth:"off",
-
-                        hideThumbsOnMobile:"off",
-                        hideBulletsOnMobile:"on",
-                        hideArrowsOnMobile:"on",
-                        hideThumbsUnderResolution:0,
-
-                        hideSliderAtLimit:0,
-                        hideCaptionAtLimit:768,
-                        hideAllCaptionAtLilmit:0,
-                        startWithSlide:0,
-                        videoJsPath:"plugins/revslider/rs-plugin/videojs/",
-                        fullScreenOffsetContainer: ""
-                    });
-                });	//ready
-            </script>
-            <!-- END REVOLUTION SLIDER -->
-            <!-- Content End -->
-        </article> <!-- END OF SPECTACULUS -->
-        <article class="toolpad">
-            <section class="tool">
-                <div data-val="<?= $masterspeed;?>" id="mrtime" class="tooltext">Time: <?= $masterspeed/1000;?>s</div>
-                <div class="toolcontrols">
-                    <div id="dectime" class="toolcontroll withspace"><i class="icon-minus"></i></div>
-                    <div id="inctime" class="toolcontroll withspace2"><i class="icon-plus"></i></div>
-                </div>
-                <div class="clear"></div>
-            </section>
-
-            <section class="tool last">
-                <div data-val="<?= $slotamount;?>" class="tooltext" id="mrslot">Slots: <?= $slotamount;?></div>
-                <div class="toolcontrols">
-                    <div id="decslot" class="toolcontroll withspace"><i class="icon-minus"></i></div>
-                    <div id="incslot" class="toolcontroll withspace2"><i class="icon-plus"></i></div>
-                </div>
-                <div class="clear"></div>
-            </section>
-            <div class="clear"></div>
-        </article>
-        <?php
+        Plugin::view('slider', 'admin/slider1/demo', [
+            'slotamount' => $slotamount,
+			'masterspeed' => $masterspeed,
+	        'path' => self::$path
+        ]);
     }
+
     static function render($items, $slider, $options = null): void {
         SliderRevolutionHtml::render($items, $slider, $options);
     }
 }
 
 class SliderRevolutionHtml {
+
     static string $path = SLIDER_PATH.'style/slider1/';
+
     static function render($items, $slider, $options = null): void {
         self::assets();
         $options = (is_array($options)) ? $options : [];
         $options = array_merge(['delay' => 3000, 'fullScreen' => 'on', 'hideThumbs' => 10], $options);
-        ?>
-        <div class="js_slider_revolution js_slider_container" style="position: relative;" data-options="<?php echo htmlentities(json_encode($options));?>">
-            <div class="js_slider_revolution_box"><ul><?php foreach ($items as $item) { SliderRevolutionHtml::item($item); } ?></ul></div>
-        </div>
-        <?php
+        Plugin::view('slider', 'style/slider1/view', [
+            'options' => $options,
+        ]);
         self::script();
     }
-    static function item($item): void {
+
+    static function item($item): string
+    {
         $item = SliderRevolution::metaData($item);
         $output = '';
         if(isset($item->value) && $item->value != '') {
@@ -312,36 +251,16 @@ class SliderRevolutionHtml {
             }
             $output .= '</li >';
         }
-        echo $output;
+        return $output;
     }
     static function script(): void {
         static $called = false; if ($called) return;
-        ?>
-        <script>
-            $(() => {
-                $.each($('.js_slider_revolution'), function (index, element) {
-                    let options = $(this).data('options');
-                    if(typeof options.ratioHeight == 'undefined') {
-                        options.ratioHeight = 1;
-                    }
-                    if(typeof options.ratioWidth == 'undefined') options.ratioWidth = 3;
-                    let sliderWidth = $(this).width();
-                    let sliderHeight = Math.ceil(sliderWidth*(parseFloat(options.ratioHeight)/parseFloat(options.ratioWidth)));
-                    $(this).css('height', sliderHeight + 'px');
-                    $(this).find('.js_slider_revolution_box').revolution(options);
-                });
-            });
-        </script>
-        <?php
+        Plugin::view('slider', 'style/slider1/script');
         $called = true;
     }
     static function assets(): void {
         static $calledAssets = false; if ($calledAssets) return;
-        ?>
-        <link rel="stylesheet" type="text/css" href="<?= self::$path;?>src/css/settings.css" media="screen" />
-        <script type="text/javascript" src="<?= self::$path;?>src/js/jquery.themepunch.plugins.min.js"></script>
-        <script type="text/javascript" src="<?= self::$path;?>src/js/jquery.themepunch.revolution.min.js"></script>
-        <?php
+        Plugin::view('slider', 'style/slider1/lib', ['path' => self::$path]);
         $calledAssets = true;
     }
     static function getCaptions($caption_key = '', $item_id = 0): array {
@@ -354,8 +273,8 @@ class SliderRevolutionHtml {
         ];
         if(!empty($caption_key) && !empty($captions[$caption_key])) {
             if(!empty($item_id)) {
-                $caption_key_meta    = Gallery::getItemMeta($item_id, 'caption_key', true);
-                if($caption_key == $caption_key_meta) $caption = Gallery::getItemMeta($item_id, 'caption', true);
+                $caption_key_meta    = GalleryItem::getMeta($item_id, 'caption_key', true);
+                if($caption_key == $caption_key_meta) $caption = GalleryItem::getMeta($item_id, 'caption', true);
             }
             include self::$path.'captions/'.$caption_key.'/config.php';
             return $captions[$caption_key];
@@ -365,22 +284,24 @@ class SliderRevolutionHtml {
         return $captions;
     }
     static function caption($key, $caption): void {
-        if(!empty($key)) include self::$path.'captions/'.$key.'/layer_caption.php';
+        if(!empty($key)) {
+            Plugin::view('slider', 'admin/slider1/captions/'.$key.'/layer_caption', [
+				'key' => $key,
+				'caption' => $caption
+            ]);
+        }
     }
 }
 
 class SliderRevolutionAjax {
-    static function itemCaptionLoad($ci, $model) {
+    #[NoReturn]
+    static function itemCaptionLoad(Skilldo\Http\Request $request, $model): void
+    {
+        if($request->isMethod('post')) {
 
-        $result['message'] 	= 'Load dữ liệu không thành công!';
+            $caption_key = $request->input('caption_key');
 
-        $result['status'] 	= 'error';
-
-        if(Request::post()) {
-
-            $caption_key = Request::post('caption_key');
-
-            $id = Request::post('id');
+            $id = $request->input('id');
 
             $caption = SliderRevolutionHtml::getCaptions($caption_key, $id);
 
@@ -390,25 +311,23 @@ class SliderRevolutionAjax {
 
                 $result['slider'] 	= '';
 
-                if(file_exists(SliderRevolution::$path.'captions/'.$caption_key.'/layer_form.php')) {
+                if(file_exists(SLIDER_PATH.'views/admin/slider1/captions/'.$caption_key.'/layer_form.blade.php')) {
 
-                    ob_start();
-                    include_once SliderRevolution::$path.'captions/'.$caption_key.'/layer_form.php';
-                    $result['data'] = ob_get_contents();
-                    ob_clean();
+                    $result['data'] = Plugin::partial('slider', 'admin/slider1/captions/' . $caption_key . '/layer_form', [
+                        'caption' 		=> $caption,
+                        'caption_key' 	=> $caption_key
+                    ]);
 
-                    ob_start();
-                    include_once SliderRevolution::$path.'views/form-caption.php';
-                    $result['slider'] = ob_get_contents();
-                    ob_clean();
+                    $result['slider'] = Plugin::partial('slider', 'admin/slider1/form-caption', [
+						'caption' 		=> $caption,
+                        'caption_key' 	=> $caption_key
+                    ]);
                 }
 
-                $result['status'] 	= 'success';
-
-                $result['message'] 	= 'Cập nhật thành công';
+                response()->success(trans('ajax.load.success'), $result);
             }
         }
-        echo json_encode($result);
+        response()->error(trans('ajax.load.error'));
     }
 }
 Ajax::admin('SliderRevolutionAjax::itemCaptionLoad');

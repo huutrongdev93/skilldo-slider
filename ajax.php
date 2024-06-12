@@ -1,20 +1,20 @@
 <?php
+
+use JetBrains\PhpStorm\NoReturn;
+
 class AdminAjaxSlider {
-    static function add($ci, $model): void {
+    #[NoReturn]
+    static function add(\SkillDo\Http\Request $request, $model): void {
 
-        $result['message'] 	= 'Thêm mới slider không thành công!';
+        if($request->isMethod('post')) {
 
-        $result['status'] 	= 'error';
+            $name = $request->input('name');
 
-        if(Request::Post()) {
-
-            $name = Request::Post('name');
-
-            $type = Request::Post('type');
+            $type = $request->input('type');
 
             $data = [
                 'name'          => $name,
-                'options'       => $type,
+                'options'       => ['type' => $type],
                 'object_type'   => 'slider'
             ];
 
@@ -22,263 +22,252 @@ class AdminAjaxSlider {
 
             if(!is_skd_error($id)) {
 
-                $result['status'] 	= 'success';
-
-                $result['message'] 	= 'Thêm slider thành công!';
+                response()->success(trans('ajax.add.success'));
             }
         }
 
-        echo json_encode($result);
+        response()->error(trans('ajax.add.error'));
     }
-    static function delete($ci, $model): void {
 
-        $result['message'] 	= 'Xóa slider không thành công!';
-        $result['status'] 	= 'error';
+    #[NoReturn]
+    static function delete(\SkillDo\Http\Request $request, $model): void {
 
-        if(Request::Post()) {
+        if($request->isMethod('post')) {
 
-            $id = Request::Post('id');
+            $id = $request->input('id');
 
             $id = Gallery::delete($id);
 
             if(!is_skd_error($id)) {
-                $result['status'] 	= 'success';
-                $result['message'] 	= 'Xóa slider thành công!';
+
+                response()->success(trans('ajax.delete.success'));
             }
         }
 
-        echo json_encode($result);
+        response()->error(trans('ajax.delete.error'));
     }
-    static function optionsLoad($ci, $model) {
+    #[NoReturn]
+    static function optionsLoad(\SkillDo\Http\Request $request, $model): void
+    {
 
-        $result['message'] 	= 'Load dữ liệu không thành công!';
+        if($request->isMethod('post')) {
 
-        $result['status'] 	= 'error';
-
-        if(Request::post()) {
-
-            $id = (int)Request::post('id');
+            $id = (int)$request->input('id');
 
             $slider = Gallery::get(Qr::set($id)->where('object_type', 'slider'));
 
             if(have_posts($slider)) {
+
                 $sliderType = Slider::list($slider->options);
+
                 if(empty($sliderType)) {
-                    $result['message'] 	= 'Loại slider không tồn tại';
-                    echo json_encode($result);
-                    return false;
+
+                    response()->error(trans('slider.ajax.option.load.error'));
                 }
+
                 ob_start();
+
                 $sliderType['class']::optionsForm($slider);
-                $result['data'] = ob_get_contents();
+
+                $result = ob_get_contents();
+
                 ob_clean();
-                $result['status'] 	= 'success';
-                $result['message'] 	= 'Cập nhật thành công';
+
+                response()->success(trans('ajax.load.success'), $result);
             }
         }
-        echo json_encode($result);
+
+        response()->error(trans('ajax.load.error'));
     }
-    static function optionsSave($ci, $model) {
+    #[NoReturn]
+    static function optionsSave(\SkillDo\Http\Request $request, $model): void
+    {
+        if($request->isMethod('post')) {
 
-        $result['message'] 	= 'Lưu dữ liệu không thành công!';
-
-        $result['status'] 	= 'error';
-
-        if(Request::post()) {
-
-            $id = (int)Request::post('id');
+            $id = (int)$request->input('id');
 
             $slider = Gallery::get(Qr::set($id)->where('object_type', 'slider'));
 
             if(empty($slider)) {
-                $result['message'] 	= 'slider không tồn tại';
-                echo json_encode($result);
-                return false;
+                response()->error(trans('slider.ajax.option.save.error'));
             }
 
             $sliderType = Slider::list($slider->options);
 
             if(empty($sliderType)) {
-                $result['message'] 	= 'Loại slider không tồn tại';
-                echo json_encode($result);
-                return false;
+
+                response()->error(trans('slider.ajax.option.load.error'));
             }
 
-            $error = $sliderType['class']::optionsSave($slider);
+            $error = $sliderType['class']::optionsSave($slider, $request);
 
             if(!is_skd_error($error)) {
 
                 CacheHandler::delete('gallery_', true);
 
-                $result['status'] 	= 'success';
-
-                $result['message'] 	= 'Cập nhật thành công';
+                response()->success(trans('ajax.save.success'));
             }
         }
 
-        echo json_encode($result);
+        response()->error(trans('ajax.save.error'));
     }
-    static function itemAdd($ci, $model) {
+    #[NoReturn]
+    static function itemAdd(\SkillDo\Http\Request $request, $model): void
+    {
 
-        $result['message'] 	= 'Thêm dữ liệu không thành công!';
+        if($request->isMethod('post')) {
 
-        $result['status'] 	= 'error';
-
-        if(Request::post()) {
-
-            $post = Request::post();
+            $post = $request->input();
 
             if(have_posts($post)) {
 
                 //Lấy id slider
-                $id = (int)Request::post('sliderId');
+                $id = (int)$request->input('sliderId');
 
                 $gallery = Gallery::get(Qr::set($id)->where('object_type', 'slider'));
 
                 if(have_posts($gallery)) {
 
-                    $id = $model->settable('galleries')->add([
+                    $id = $model->table('galleries')->add([
                         'group_id'      => $id,
                         'object_type'   => 'slider'
                     ]);
 
                     if($id) {
+
                         CacheHandler::delete('gallery_', true);
-                        $result['status'] 	= 'success';
-                        $result['id'] 		= $id;
-                        $result['message'] 	= 'Cập nhật thành công';
+
+                        response()->success(trans('ajax.add.success'));
                     }
                 }
             }
         }
-        echo json_encode($result);
+
+        response()->error(trans('ajax.add.error'));
     }
-    static function itemLoad($ci, $model) {
+    #[NoReturn]
+    static function itemLoad(\SkillDo\Http\Request $request, $model): void
+    {
+        if($request->isMethod('post')) {
 
-        $result['message'] 	= 'Load dữ liệu không thành công!';
+            $id = (int)$request->input('id');
 
-        $result['status'] 	= 'error';
+            $sliderType = $request->input('sliderType');
 
-        if(Request::post()) {
-
-            $id = (int)Request::post('id');
-
-            $sliderType = Request::post('sliderType');
+            if(Str::isSerialized($sliderType)) {
+                $sliderType = unserialize($sliderType);
+                $sliderType = $sliderType['type'];
+            }
 
             $slider = Slider::list($sliderType);
 
             if(empty($slider)) {
-                $result['message'] 	= 'Loại slider không tồn tại';
-                echo json_encode($result);
-                return false;
+
+                response()->error(trans('slider.ajax.option.load.error'));
             }
 
-            $item = Gallery::getItem($id);
+            $item = GalleryItem::get($id);
 
             if(have_posts($item)) {
+
                 ob_start();
+
                 $slider['class']::itemForm($item);
-                $result['data'] = ob_get_contents();
+
+                $result = ob_get_contents();
+
                 ob_clean();
-                $result['status'] 	= 'success';
-                $result['message'] 	= 'Cập nhật thành công';
+
+                response()->success(trans('ajax.load.success'), $result);
             }
         }
-        echo json_encode($result);
+
+        response()->error(trans('ajax.load.error'));
     }
-    static function itemSave($ci, $model) {
+    #[NoReturn]
+    static function itemSave(\SkillDo\Http\Request $request, $model): void
+    {
+        if($request->isMethod('post')) {
 
-        $result['message'] 	= 'Lưu dữ liệu không thành công!';
+            $id = (int)$request->input('id');
 
-        $result['status'] 	= 'error';
+            $sliderType = $request->input('type');
 
-        if(Request::post()) {
-
-            $id = (int)Request::post('id');
-
-            $sliderType = Request::post('type');
+            if(Str::isSerialized($sliderType)) {
+                $sliderType = unserialize($sliderType);
+                $sliderType = $sliderType['type'];
+            }
 
             $slider = Slider::list($sliderType);
 
             if(empty($slider)) {
-                $result['message'] 	= 'Loại slider không tồn tại';
-                echo json_encode($result);
-                return false;
+
+                response()->error(trans('slider.ajax.option.load.error'));
             }
 
-            $item = Gallery::getItem($id);
+            $item = GalleryItem::get($id);
 
             if(have_posts($item)) {
 
-                $error = $slider['class']::itemSave($item);
+                $error = $slider['class']::itemSave($item, $request);
 
                 if(!is_skd_error($error)) {
 
                     CacheHandler::delete('gallery_', true);
 
-                    $result['status'] 	= 'success';
-
-                    $result['message'] 	= 'Cập nhật thành công';
+                    response()->success(trans('ajax.save.success'));
                 }
             }
         }
 
-        echo json_encode($result);
+        response()->error(trans('ajax.save.error'));
     }
-    static function itemSort($ci, $model) {
 
-        $result['message'] 	= 'Lưu dữ liệu không thành công!';
+    #[NoReturn]
+    static function itemSort(\SkillDo\Http\Request $request, $model): void
+    {
+        if($request->isMethod('post')) {
 
-        $result['status'] 	= 'error';
-
-        if(Request::post()) {
-
-            $slider_item_order = Request::post('slider_item_order', ['type' => 'int']);
+            $slider_item_order = $request->input('slider_item_order', ['type' => 'int']);
 
             if(have_posts($slider_item_order)) {
 
-                $model->settable('galleries');
-
                 foreach ($slider_item_order as $id => $order) {
-                    $model->update(['order' => $order], Qr::set($id));
+                    $model->table('galleries');
+                    $model->where('id', $id)->update(['order' => $order]);
                 }
 
                 CacheHandler::delete('gallery_', true);
 
-                $result['status'] 	= 'success';
-
-                $result['message'] 	= 'Cập nhật thành công';
+                response()->success(trans('ajax.update.success'));
             }
         }
-        echo json_encode($result);
+
+        response()->error(trans('ajax.update.error'));
     }
-    static function itemDelete($ci, $model) {
+    #[NoReturn]
+    static function itemDelete(\SkillDo\Http\Request $request, $model): void
+    {
+        if($request->isMethod('post')) {
 
-        $result['message'] 	= 'Lưu dữ liệu không thành công!';
+            $id = (int)$request->input('id');
 
-        $result['status'] 	= 'error';
-
-        if(Request::post()) {
-
-            $id = (int)Request::post('id');
-
-            $item = Gallery::getItem($id);
+            $item = GalleryItem::get($id);
 
             if(have_posts($item)) {
 
-                $error = Gallery::deleteItem($id);
+                $error = GalleryItem::delete($id);
 
                 if(!is_skd_error($error)) {
 
                     CacheHandler::delete('gallery_', true);
 
-                    $result['status'] 	= 'success';
-
-                    $result['message'] 	= 'Cập nhật thành công';
+                    response()->success(trans('ajax.delete.success'));
                 }
             }
         }
-        echo json_encode($result);
+
+        response()->error(trans('ajax.delete.error'));
     }
 }
 Ajax::admin('AdminAjaxSlider::add');
