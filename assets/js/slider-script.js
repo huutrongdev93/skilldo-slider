@@ -30,19 +30,19 @@ let SliderHandler = function() {
 
 SliderHandler.prototype.add = function(element) {
 
-    let loading  = SkilldoHelper.buttonLoading(element.find('button[type="submit"]'))
+    let loading  = SkilldoUtil.buttonLoading(element.find('button[type="submit"]'))
 
     let name 	= element.find('input[name="name"]').val();
 
     let type 	= element.find('input[name="type"]:checked').val();
 
     if(name.length === 0) {
-        SkilldoHelper.message.error('Không được bỏ trống tên slider');
+        SkilldoMessage.error('Không được bỏ trống tên slider');
         return false;
     }
 
     if(typeof type == 'undefined' || type.length === 0) {
-        SkilldoHelper.message.error('Bạn chưa chọn loại slider');
+        SkilldoMessage.error('Bạn chưa chọn loại slider');
         return false;
     }
 
@@ -56,7 +56,7 @@ SliderHandler.prototype.add = function(element) {
 
     request.post(ajax, data).then(function( response ) {
 
-        SkilldoHelper.message.response(response);
+        SkilldoMessage.response(response);
 
         loading.success()
 
@@ -80,7 +80,7 @@ SliderHandler.prototype.delete = function(e) {
 
     request.post(ajax, data).then(function( response ) {
 
-        SkilldoHelper.message.response(response);
+        SkilldoMessage.response(response);
 
         if(response.status === 'success') {
             window.location.reload();
@@ -114,7 +114,7 @@ SliderHandler.prototype.optionsLoad = function(e) {
             formBuilderReset();
         }
         else {
-            SkilldoHelper.message.response(response);
+            SkilldoMessage.response(response);
         }
     });
 
@@ -135,7 +135,7 @@ SliderHandler.prototype.optionsSave = function(e) {
 
         $('#sliderOptionsModal .loading').hide();
 
-        SkilldoHelper.message.response(response);
+        SkilldoMessage.response(response);
 
         if(response.status === 'success') {
 
@@ -177,7 +177,7 @@ SliderHandler.prototype.itemInfo = function(e) {
             FormHelper.reset();
         }
         else {
-            SkilldoHelper.message.response(response);
+            SkilldoMessage.response(response);
         }
     });
 
@@ -196,7 +196,7 @@ SliderHandler.prototype.itemAdd = function(e) {
     };
 
     request.post(ajax, data).then(function( response ) {
-        SkilldoHelper.message.response(response);
+        SkilldoMessage.response(response);
         if(response.status === 'success') {
             window.location = base + '/plugins?page=slider&view=detail&id=' + sliderId;
         }
@@ -219,7 +219,7 @@ SliderHandler.prototype.itemSave = function(e) {
     data.type = sliderType;
 
     request.post(ajax, data).then(function( response ) {
-        SkilldoHelper.message.response(response);
+        SkilldoMessage.response(response);
     });
 
     return false;
@@ -232,7 +232,7 @@ SliderHandler.prototype.itemSort = function(e) {
     data.action = 'AdminAjaxSlider::itemSort';
 
     request.post(ajax, data).then(function( response ) {
-        SkilldoHelper.message.response(response);
+        SkilldoMessage.response(response);
     });
 
     return false;
@@ -250,7 +250,7 @@ SliderHandler.prototype.itemDelete = function(e) {
     };
 
     request.post(ajax, data).then(function( response ) {
-        SkilldoHelper.message.response(response);
+        SkilldoMessage.response(response);
         if(response.status === 'success') {
             box.remove();
             if(id == itemId) {
