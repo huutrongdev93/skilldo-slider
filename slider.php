@@ -1,12 +1,4 @@
 <?php
-/**
-Plugin name     : Slider v2
-Plugin class    : Slider
-Plugin uri      : http://sikido.vn
-Description     : Tạo và quản lý slider với nhiều hiệu ứng chuyển động.
-Author          : SKDSoftware Dev Team
-Version         : 3.2.0
- */
 const SLIDER_NAME = 'slider';
 
 define('SLIDER_PATH', Path::plugin(SLIDER_NAME).'/');
