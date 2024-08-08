@@ -295,7 +295,7 @@ class SliderRevolutionHtml {
 
 class SliderRevolutionAjax {
     #[NoReturn]
-    static function itemCaptionLoad(Skilldo\Http\Request $request, $model): void
+    static function itemCaptionLoad(SkillDo\Http\Request $request, $model): void
     {
         if($request->isMethod('post')) {
 

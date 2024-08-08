@@ -46,7 +46,7 @@ SliderHandler.prototype.add = function(element) {
         return false;
     }
 
-    loading.loading()
+    loading.start()
 
     let data = {
         'action' 		: 'AdminAjaxSlider::add',
@@ -58,7 +58,7 @@ SliderHandler.prototype.add = function(element) {
 
         SkilldoMessage.response(response);
 
-        loading.success()
+        loading.stop()
 
         if(response.status === 'success') {
 
