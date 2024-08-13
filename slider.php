@@ -2,27 +2,15 @@
 
 const SLIDER_NAME = 'slider';
 
-
-
 define('SLIDER_PATH', Path::plugin(SLIDER_NAME).'/');
-
-
 
 class Slider {
 
-
-
     private string $name = 'Slider';
-
-
 
     function __construct() {}
 
-
-
     public function active(): void {}
-
-
 
     public function uninstall(): void {
 
@@ -33,8 +21,6 @@ class Slider {
         $model->table('galleries')::delete(Qr::set('object_type', 'slider'));
 
     }
-
-
 
     static function list($key = null) {
 
@@ -78,18 +64,13 @@ class Slider {
 
         ];
 
-
         if($key != null)
 
         return Arr::get($slider, $key);
 
-
-
         return apply_filters('register_slider', $slider);
 
     }
-
-
 
     static function render($sliderId, $options = null): void {
 
