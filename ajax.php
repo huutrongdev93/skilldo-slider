@@ -103,7 +103,7 @@ class AdminAjaxSlider {
 
             if(!is_skd_error($error)) {
 
-                CacheHandler::delete('gallery_', true);
+                \SkillDo\Cache::delete('gallery_', true);
 
                 response()->success(trans('ajax.save.success'));
             }
@@ -135,7 +135,7 @@ class AdminAjaxSlider {
 
                     if($id) {
 
-                        CacheHandler::delete('gallery_', true);
+                        \SkillDo\Cache::delete('gallery_', true);
 
                         response()->success(trans('ajax.add.success'));
                     }
@@ -213,7 +213,7 @@ class AdminAjaxSlider {
 
                 if(!is_skd_error($error)) {
 
-                    CacheHandler::delete('gallery_', true);
+                    \SkillDo\Cache::delete('gallery_', true);
 
                     response()->success(trans('ajax.save.success'));
                 }
@@ -237,7 +237,7 @@ class AdminAjaxSlider {
                     $model->where('id', $id)->update(['order' => $order]);
                 }
 
-                CacheHandler::delete('gallery_', true);
+                \SkillDo\Cache::delete('gallery_', true);
 
                 response()->success(trans('ajax.update.success'));
             }
@@ -260,7 +260,7 @@ class AdminAjaxSlider {
 
                 if(!is_skd_error($error)) {
 
-                    CacheHandler::delete('gallery_', true);
+                    \SkillDo\Cache::delete('gallery_', true);
 
                     response()->success(trans('ajax.delete.success'));
                 }

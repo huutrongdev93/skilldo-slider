@@ -47,7 +47,7 @@ class Slider {
     static function render($sliderId, $options = null): void {
         $slider = Gallery::get(Qr::set('id', $sliderId)->where('object_type', 'slider'));
         if(have_posts($slider)) {
-            $sliderClass = Slider::list($slider->options . '.class');
+            $sliderClass = Slider::list( unserialize($slider->options) . '.class');
             if (class_exists($sliderClass)) {
                 $items = GalleryItem::gets(Qr::set('group_id', $sliderId)->where('object_type', 'slider')->orderBy('order'));
                 if (have_posts($items)) {
