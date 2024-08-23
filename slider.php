@@ -47,15 +47,24 @@ class Slider {
     static function render($sliderId, $options = null): void {
         $slider = Gallery::get(Qr::set('id', $sliderId)->where('object_type', 'slider'));
         if(have_posts($slider)) {
-            $sliderClass = Slider::list( unserialize($slider->options) . '.class');
-            if (class_exists($sliderClass)) {
-                $items = GalleryItem::gets(Qr::set('group_id', $sliderId)->where('object_type', 'slider')->orderBy('order'));
-                if (have_posts($items)) {
-                    if(!Device::isGoogleSpeed()) {
-                        $sliderClass::render($items, $slider, $options);
-                    }
-                    else {
-                        Template::img($items[0]->value, 'slider', ['css' => 'width:100%']);
+
+            $slider->options = unserialize($slider->options);
+
+            if(!empty($slider->options['type'])) {
+
+                $sliderClass = Slider::list( $slider->options['type'] . '.class');
+
+                if (class_exists($sliderClass)) {
+
+                    $items = GalleryItem::gets(Qr::set('group_id', $sliderId)->where('object_type', 'slider')->orderBy('order'));
+
+                    if (have_posts($items)) {
+                        if(!Device::isGoogleSpeed()) {
+                            $sliderClass::render($items, $slider, $options);
+                        }
+                        else {
+                            Template::img($items[0]->value, 'slider', ['css' => 'width:100%']);
+                        }
                     }
                 }
             }

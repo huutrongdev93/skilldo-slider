@@ -24,6 +24,6 @@
         --slider-thumb-color-active:{!! $sliderOptions['sliderTxtActive'] !!};
         --slider-thumb-bg:{!! $sliderOptions['sliderTxtBg'] !!};
         --slider-thumb-bg-active:{!! $sliderOptions['sliderTxtBgActive'] !!};
-        --slider-thumb-font-size:{!! $sliderOptions['sliderTxtFontSize'] !!};
+        --slider-thumb-font-size:{!! $sliderOptions['sliderTxtFontSize'] !!}px;
     }
 </style>

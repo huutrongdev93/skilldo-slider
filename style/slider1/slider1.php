@@ -211,17 +211,36 @@ class SliderRevolutionHtml {
         self::assets();
         $options = (is_array($options)) ? $options : [];
         $options = array_merge(['delay' => 3000, 'fullScreen' => 'on', 'hideThumbs' => 10], $options);
-        Plugin::view('slider', 'style/slider1/view', [
-            'options' => $options,
-        ]);
+        Plugin::view('slider', 'style/slider1/view', compact('items', 'slider', 'options'));
         self::script();
     }
 
     static function item($item): string
     {
         $item = SliderRevolution::metaData($item);
+
         $output = '';
+
         if(isset($item->value) && $item->value != '') {
+
+            if(empty($item->type)) {
+
+                $type = 'image';
+
+                if(Url::isYoutube($item->value)) {
+                    $type = 'youtube';
+                }
+                else {
+                    $extension = pathinfo($item->value, PATHINFO_EXTENSION);
+
+                    if(in_array($extension, ['mp4', 'webm', 'webma', 'flv', 'avi', 'mpge', 'mkv', 'm4p', 'm4v', 'm4a', 'amv', 'mov'])) {
+                        $type = 'video';
+                    }
+                }
+
+                $item->type = $type;
+            }
+
             $transition = 'data-transition="'.$item->data_transition.'" data-slotamount="'.$item->data_slotamount.'" data-masterspeed="'.$item->data_masterspeed.'"';
             $output .= '<li '.$transition.' data-link="'.$item->url.'">';
             if($item->type == 'youtube') {
@@ -242,7 +261,7 @@ class SliderRevolutionHtml {
             if($item->type == 'image') {
                 $output .= '<img src="'.Template::imgLink($item->value).'"  alt="'.$item->name.'"  data-bgfit="cover" data-bgposition="left top" data-bgrepeat="no-repeat">';
             }
-            if($item->caption_key != 'none') {
+            if($item->caption_key != 'none' && $item->caption_key != 'caption_key') {
                 $caption = self::getCaptions($item->caption_key, $item->id);
                 ob_start();
                 self::caption($item->caption_key, $caption);

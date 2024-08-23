@@ -36,7 +36,7 @@
 			<form action="" id="js_slider_form__options" autocomplete="off">
 				<div class="row" id="sliderOptionsModal_content"></div>
 				<div class="text-right">
-					<button class="btn-icon btn-blue">{!! Admin::icon('save') !!} Lưu</button>
+					<button class="btn btn-blue">{!! Admin::icon('save') !!} Lưu</button>
 				</div>
 			</form>
 		</div>

@@ -75,23 +75,29 @@
                 <div class="system-tab" style="padding:0;width: 15%;">
                     <ul class="nav nav-tabs js_slider_item_caption__list" role="tablist" style="min-height: 420px;background-color: var(--content-bg); border-radius: 0;padding:10px;">
                         <li class="">
-                            {!! \SkillDo\Form\Form::render([
-                                'label' => 'Không sử dụng',
-                                'name' => 'caption_key',
-                                'type' => 'radio',
-                                'value' => 'none'
-                            ], $item->caption_key ?? null) !!}
+                            <div class="col-md-12 form-group">
+                                <div class="group form-input">
+                                    <div class="form-check radio">
+                                        <label>
+                                            <input type="radio" name="caption_key" value="none" class="form-check-input" {{ ($item->caption_key == 'none') ? 'checked' : '' }}>
+                                            &nbsp;&nbsp;Không sử dụng
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                         </li>
                         @foreach (SliderRevolutionHtml::getCaptions() as $cap_key => $caption_value)
                             <li class="">
-                                {!! \SkillDo\Form\Form::render([
-                                'label' => $caption_value['label'],
-                                'name' => 'caption_key',
-                                'type' => 'radio',
-                                'value' => $cap_key,
-                                'data-key' => $cap_key,
-                                'data-id' => $item->id
-                            ], $item->caption_key ?? null) !!}
+                                <div class="col-md-12 form-group">
+                                    <div class="group form-input">
+                                        <div class="form-check radio">
+                                            <label>
+                                                <input type="radio" name="caption_key" value="{{ $cap_key }}" data-id="{{ $item->id }}" data-key="{{ $cap_key }}" class="form-check-input" {{ ($item->caption_key == $cap_key) ? 'checked' : '' }}>
+                                                &nbsp;&nbsp;{{ $caption_value['label'] }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
                             </li>
                         @endforeach
                     </ul>

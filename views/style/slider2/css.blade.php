@@ -17,7 +17,8 @@
         outline: none;
     }
     .sliderWidthTitle .slider_list_thumb .item .heading {
-        font-size: var(--slider-thumb-font-size); line-height: calc(var(--slider-thumb-font-size) + var(--slider-thumb-font-size)*0.5);
+        font-size: var(--slider-thumb-font-size);
+        line-height: calc(var(--slider-thumb-font-size) + var(--slider-thumb-font-size)*0.5);
         text-align: center;
         margin: 0;
         height: calc((var(--slider-thumb-font-size) + var(--slider-thumb-font-size)*0.5)*2); overflow: hidden;
