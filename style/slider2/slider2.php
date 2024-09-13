@@ -14,12 +14,12 @@ class SliderWithTitle {
     static function optionsForm($slider): void {
         $options = Metadata::get('slider', $slider->id, 'options', true);
 
-		$sliderTxtType = [
-			'out-slider' => 'Dưới slider',
-			'in-slider' => 'Trong slider'
-		];
+        $sliderTxtType = [
+            'out-slider' => 'Dưới slider',
+            'in-slider' => 'Trong slider'
+        ];
 
-		$sliderTxtFontSize = ['10' => '10', '11' => '11', '13' => '13',  '14' => '14', '15' => '15', '16' => '16', '17' => '17', '18' => '18', '20' => '20',  '25' => '25', '30' => '30'];
+        $sliderTxtFontSize = ['10' => '10', '11' => '11', '13' => '13',  '14' => '14', '15' => '15', '16' => '16', '17' => '17', '18' => '18', '20' => '20',  '25' => '25', '30' => '30'];
 
         $form = form();
         $form->select('sliderTxtType', $sliderTxtType, ['start' => 15,'label' => 'Kiểu tiêu đề slider'], (empty($options['sliderTxtType'])) ? 'in-slider' : $options['sliderTxtType']);
@@ -28,7 +28,7 @@ class SliderWithTitle {
         $form->color('sliderTxtBgActive', ['start' => 15,'label' => 'Màu nền thumb (active)'], (empty($options['sliderTxtBgActive'])) ? '' : $options['sliderTxtBgActive']);
         $form->color('sliderTxtActive', ['start' => 15,'label' => 'Màu chữ thumb (active)'], (empty($options['sliderTxtActive'])) ? '' : $options['sliderTxtActive']);
         $form->tab('sliderTxtFontSize', $sliderTxtFontSize, [
-	        'label' => 'Cỡ chữ',
+            'label' => 'Cỡ chữ',
         ], (empty($options['sliderTxtFontSize'])) ? '14' : $options['sliderTxtFontSize']);
 
         $form->html(false);
@@ -47,7 +47,7 @@ class SliderWithTitle {
     }
     static function itemForm($item): void {
 
-        $item = SliderWithTitle::metaData($item);
+        $item = SliderWithTitle::metaData($item->toObject());
 
         $form = form();
 
@@ -126,6 +126,7 @@ class SliderWithTitleHtml {
         $id = (!empty($options['id'])) ? $options['id'] : uniqid();
 
         foreach ($items as $key => $item) {
+            $item = $item->toObject();
             $items[$key] = SliderWithTitle::metaData($item);
         }
 

@@ -7,7 +7,7 @@ class SliderRevolution {
 
     static function itemForm($item): void {
 
-        $item = SliderRevolution::metaData($item);
+        $item = SliderRevolution::metaData($item->toObject());
 
         if($item->caption_key != 'none') {
             $caption_key = $item->caption_key;
@@ -34,13 +34,13 @@ class SliderRevolution {
 
         SliderRevolution::assetsEditor();
 
-		Plugin::view('slider', 'admin/slider1/item-form', [
+        Plugin::view('slider', 'admin/slider1/item-form', [
             'form' => $form,
             'item' => $item,
             'animations' => SliderRevolution::animation(),
             'caption_key' => $caption_key ?? '',
             'caption' => $caption ?? '',
-		]);
+        ]);
     }
 
     static function itemSave($item, \SkillDo\Http\Request $request): int|array|SKD_Error {
@@ -180,7 +180,7 @@ class SliderRevolution {
     }
 
     static function assetsAdmin(): void {
-		$assets = new AssetPosition('slider');
+        $assets = new AssetPosition('slider');
         $assets->add('tween-max', 'https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js', ['minify' => false]);
         $assets->scripts();
     }
@@ -193,8 +193,8 @@ class SliderRevolution {
 
         Plugin::view('slider', 'admin/slider1/demo', [
             'slotamount' => $slotamount,
-			'masterspeed' => $masterspeed,
-	        'path' => self::$path
+            'masterspeed' => $masterspeed,
+            'path' => self::$path
         ]);
     }
 
@@ -217,6 +217,8 @@ class SliderRevolutionHtml {
 
     static function item($item): string
     {
+        $item = $item->toObject();
+
         $item = SliderRevolution::metaData($item);
 
         $output = '';
@@ -305,8 +307,8 @@ class SliderRevolutionHtml {
     static function caption($key, $caption): void {
         if(!empty($key)) {
             Plugin::view('slider', 'admin/slider1/captions/'.$key.'/layer_caption', [
-				'key' => $key,
-				'caption' => $caption
+                'key' => $key,
+                'caption' => $caption
             ]);
         }
     }
@@ -338,7 +340,7 @@ class SliderRevolutionAjax {
                     ]);
 
                     $result['slider'] = Plugin::partial('slider', 'admin/slider1/form-caption', [
-						'caption' 		=> $caption,
+                        'caption' 		=> $caption,
                         'caption_key' 	=> $caption_key
                     ]);
                 }

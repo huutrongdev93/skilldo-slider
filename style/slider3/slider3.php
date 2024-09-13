@@ -4,7 +4,7 @@ use JetBrains\PhpStorm\NoReturn;
 
 class SliderNoTitle {
     static function itemForm($item): void {
-        $item = SliderNoTitle::metaData($item);
+        $item = SliderNoTitle::metaData($item->toObject());
         if($item->captionKey != 'none') {
             $captionKey = $item->captionKey;
             $caption = SliderNoTitleHtml::getCaptions($captionKey, $item->id);
@@ -69,10 +69,10 @@ class SliderNoTitle {
 
         return $errors;
     }
-	static function scriptAdmin(): void
+    static function scriptAdmin(): void
     {
         Plugin::view('slider', 'admin/slider3/item-script');
-	}
+    }
     static function metaData($item): object {
         $option = [
             'url'           => GalleryItem::getMeta($item->id, 'url', true),
@@ -103,13 +103,14 @@ class SliderNoTitleHtml {
         $id = (!empty($options['id'])) ? $options['id'] : uniqid();
 
         foreach ($items as $key => $item) {
+            $item = $item->toObject();
             $items[$key] = SliderWithTitle::metaData($item);
         }
         Plugin::view('slider', 'style/slider3/view', [
-			'items'     => $items,
-			'slider'    => $slider,
-			'options'   => $options,
-			'id'        => $id,
+            'items'     => $items,
+            'slider'    => $slider,
+            'options'   => $options,
+            'id'        => $id,
         ]);
         self::css();
         self::script();
@@ -146,7 +147,7 @@ class SliderNoTitleHtml {
                 'caption'   => self::getCaptions($item->captionKey, $item->id),
             ]);
         }
-		return '';
+        return '';
     }
 }
 
@@ -180,7 +181,8 @@ class SliderNoTitleAjax {
             }
         }
 
-		response()->error(trans('ajax.load.error'));
+        response()->error(trans('ajax.load.error'));
     }
 }
+
 Ajax::admin('SliderNoTitleAjax::itemCaptionLoad');
