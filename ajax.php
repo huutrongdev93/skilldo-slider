@@ -58,13 +58,15 @@ class AdminAjaxSlider {
 
             if(have_posts($slider)) {
 
-                $slider->options = @unserialize($slider->options);
+                $slider->options = (Str::isSerialized($slider->options)) ? unserialize($slider->options) : $slider->options;
 
-                if(empty($slider->options['type'])) {
+                $type = !empty($slider->options['type']) ? $slider->options['type'] : $slider->options;
+
+                if(empty($type)) {
                     response()->error(trans('slider.ajax.option.load.error'));
                 }
 
-                $sliderType = Slider::list($slider->options['type']);
+                $sliderType = Slider::list($type);
 
                 if(empty($sliderType)) {
 
@@ -97,13 +99,15 @@ class AdminAjaxSlider {
             if(empty($slider)) {
                 response()->error(trans('slider.ajax.option.save.error'));
             }
-            $slider->options = @unserialize($slider->options);
+            $slider->options = (Str::isSerialized($slider->options)) ? unserialize($slider->options) : $slider->options;
 
-            if(empty($slider->options['type'])) {
+            $type = !empty($slider->options['type']) ? $slider->options['type'] : $slider->options;
+
+            if(empty($type)) {
                 response()->error(trans('slider.ajax.option.load.error'));
             }
 
-            $sliderType = Slider::list($slider->options['type']);
+            $sliderType = Slider::list($type);
 
             if(empty($sliderType)) {
 

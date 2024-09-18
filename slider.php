@@ -48,11 +48,13 @@ class Slider {
         $slider = Gallery::get(Qr::set('id', $sliderId)->where('object_type', 'slider'));
         if(have_posts($slider)) {
 
-            $slider->options = unserialize($slider->options);
+            $slider->options = (Str::isSerialized($slider->options)) ? unserialize($slider->options) : $slider->options;
 
-            if(!empty($slider->options['type'])) {
+            $type = !empty($slider->options['type']) ? $slider->options['type'] : $slider->options;
 
-                $sliderClass = Slider::list( $slider->options['type'] . '.class');
+            if(!empty($type)) {
+
+                $sliderClass = Slider::list( $type . '.class');
 
                 if (class_exists($sliderClass)) {
 

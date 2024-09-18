@@ -20,8 +20,8 @@ class AdminSlider {
             foreach ($sliders as $slider) {
                 if(Str::isSerialized($slider->options)) {
                     $slider->options = unserialize($slider->options);
-                    $slider->options = $slider->options['type'];
                 }
+                $slider->options = !empty($slider->options['type']) ? $slider->options['type'] : $slider->options;
             }
 
             $form = form();
@@ -61,8 +61,9 @@ class AdminSlider {
 
             if(Str::isSerialized($slider->options)) {
                 $slider->options = unserialize($slider->options);
-                $slider->options = $slider->options['type'];
             }
+
+            $slider->options = !empty($slider->options['type']) ? $slider->options['type'] : $slider->options;
 
             $items  = GalleryItem::gets(Qr::set('group_id', $id)->where('object_type', 'slider')->orderBy('order'));
 
