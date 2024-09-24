@@ -1,6 +1,8 @@
 <?php
 
 use JetBrains\PhpStorm\NoReturn;
+use SkillDo\DB;
+use SkillDo\Model\ThemeMenuItem;
 
 class AdminAjaxSlider {
     #[NoReturn]
@@ -36,12 +38,11 @@ class AdminAjaxSlider {
 
             $id = $request->input('id');
 
-            $id = Gallery::delete($id);
+            DB::table('group')->where('id', $id)->delete();
 
-            if(!is_skd_error($id)) {
+            ThemeMenuItem::where('menu_id', $id)->remove();
 
-                response()->success(trans('ajax.delete.success'));
-            }
+            response()->success(trans('ajax.delete.success'));
         }
 
         response()->error(trans('ajax.delete.error'));
@@ -54,7 +55,7 @@ class AdminAjaxSlider {
 
             $id = (int)$request->input('id');
 
-            $slider = Gallery::get(Qr::set($id)->where('object_type', 'slider'));
+            $slider = Gallery::whereKey($id)->where('object_type', 'slider')->first();
 
             if(have_posts($slider)) {
 
@@ -94,7 +95,7 @@ class AdminAjaxSlider {
 
             $id = (int)$request->input('id');
 
-            $slider = Gallery::get(Qr::set($id)->where('object_type', 'slider'));
+            $slider = Gallery::whereKey($id)->where('object_type', 'slider')->first();
 
             if(empty($slider)) {
                 response()->error(trans('slider.ajax.option.save.error'));
@@ -139,11 +140,11 @@ class AdminAjaxSlider {
                 //Lấy id slider
                 $id = (int)$request->input('sliderId');
 
-                $gallery = Gallery::get(Qr::set($id)->where('object_type', 'slider'));
+                $gallery = Gallery::whereKey($id)->where('object_type', 'slider')->first();
 
                 if(have_posts($gallery)) {
 
-                    $id = $model->table('galleries')->add([
+                    $id = GalleryItem::insert([
                         'group_id'      => $id,
                         'object_type'   => 'slider'
                     ]);
