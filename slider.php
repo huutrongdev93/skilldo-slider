@@ -1,4 +1,7 @@
 <?php
+
+use SkillDo\DB;
+
 const SLIDER_NAME = 'slider';
 
 define('SLIDER_PATH', Path::plugin(SLIDER_NAME).'/');
@@ -12,9 +15,8 @@ class Slider {
     public function active(): void {}
 
     public function uninstall(): void {
-        $model = model('group');
-        $model::delete(Qr::set('object_type', 'slider'));
-        $model->table('galleries')::delete(Qr::set('object_type', 'slider'));
+        DB::table('group')->where('object_type', 'slider')->delete();
+        DB::table('galleries')->where('object_type', 'slider')->delete();
     }
 
     static function list($key = null) {
