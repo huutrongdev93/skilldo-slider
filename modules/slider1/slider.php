@@ -1,5 +1,5 @@
 <?php
-namespace Slider\Style1;
+namespace Slider\Module\Style1;
 
 use Language;
 use Plugin;

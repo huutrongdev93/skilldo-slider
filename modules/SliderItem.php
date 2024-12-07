@@ -1,5 +1,5 @@
 <?php
-namespace Slider;
+namespace Slider\Module;
 
 class SliderItem
 {

@@ -8,6 +8,8 @@ class ClassAutoLoad {
 
     static $storage = null;
 
+    static ?array $moduleMap = null;
+
     protected string $name = 'slider';
 
     protected array $files = [];
@@ -24,6 +26,8 @@ class ClassAutoLoad {
 
     public function __construct()
     {
+        add_filter('cms_class_autoloader_map', [$this, 'autoLoadModule'], 10, 2);
+
         $autoLoads = $this->storage()->json($this->name.'/autoload/autoload.json');
 
         $this->files = $autoLoads['files'] ?? [];
@@ -61,6 +65,21 @@ class ClassAutoLoad {
         }
 
         return self::$storage;
+    }
+
+    public function autoLoadModule($classMaps, $class): array
+    {
+        if(str_starts_with($class, "Slider\\"))
+        {
+            if(static::$moduleMap === null)
+            {
+                static::$moduleMap = include __DIR__. '/autoload_module.php';
+            }
+
+            $classMaps = array_merge($classMaps, static::$moduleMap);
+        }
+
+        return $classMaps;
     }
 
     public function autoLoadFolder(string $path): void

@@ -1,5 +1,5 @@
 <?php
-namespace Slider\Style2;
+namespace Slider\Module\Style2;
 
 use Language;
 use Metadata;
@@ -132,7 +132,7 @@ class Slider
     }
 }
 
-class SliderItem extends \Slider\SliderItem
+class SliderItem extends \Slider\Module\SliderItem
 {
     public function __construct(public $item)
     {
@@ -215,10 +215,10 @@ class SliderItem extends \Slider\SliderItem
     }
 }
 
-class SliderCaption extends \Slider\SliderCaption
+class SliderCaption extends \Slider\Module\SliderCaption
 {
 }
 
-class SliderTransition extends \Slider\SliderTransition
+class SliderTransition extends \Slider\Module\SliderTransition
 {
 }

@@ -12,18 +12,15 @@ class Slider
     {
         $slider = [
             'slider1' => [
-                'class'     => \Slider\Style1\Slider::class,
-                'item'      => \Slider\Style1\SliderItem::class,
+                'class'     => \Slider\Module\Style1\Slider::class,
                 'options'   => false
             ],
             'slider2' => [
-                'class'     => \Slider\Style2\Slider::class,
-                'item'      => \Slider\Style2\SliderItem::class,
+                'class'     => \Slider\Module\Style2\Slider::class,
                 'options'   => true
             ],
             'slider3' => [
-                'class'     => \Slider\Style3\Slider::class,
-                'item'      => \Slider\Style3\SliderItem::class,
+                'class'     => \Slider\Module\Style3\Slider::class,
                 'options'   => false
             ]
         ];

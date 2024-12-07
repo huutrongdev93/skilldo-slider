@@ -1,11 +1,11 @@
 <?php
-namespace Slider\Style3;
+namespace Slider\Module\Style3;
 
 use Plugin;
 use SkillDo\Cache;
 use ThemeCssBuild;
 
-class Caption1 extends \Slider\Caption
+class Caption1 extends \Slider\Module\Caption
 {
     public string $key = 'caption1';
 

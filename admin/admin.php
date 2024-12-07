@@ -1,6 +1,7 @@
 <?php
 
 use SkillDo\Validate\Rule;
+use Slider\Update\Updater;
 
 class SliderAdmin
 {
@@ -112,5 +113,13 @@ class SliderAdmin
 if(!request()->ajax())
 {
     add_action('admin_init', 'SliderAdmin::navigation');
+
     add_action('admin_init', 'SliderAdmin::assets');
+
+    if(Plugin::getCheckUpdate('slider') !== SLIDER_VERSION)
+    {
+        $updater = new Updater();
+
+        $updater->checkForUpdates();
+    }
 }

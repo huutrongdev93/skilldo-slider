@@ -1,18 +1,14 @@
 {
     "folders" : [
         "includes",
-        "admin",
-        "modules"
+        "admin"
     ],
-    "files" : [
-        "update/update.php"
-    ],
+    "files" : [],
     "only-admin" : {
         "folders" : [],
         "files" : [
             "admin/admin.php",
-            "admin/ajax.php",
-            "update/update.php"
+            "admin/ajax.php"
         ]
     },
     "only-client" : {

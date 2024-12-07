@@ -1,9 +1,9 @@
 <?php
-namespace Slider\Style1;
+namespace Slider\Module\Style1;
 
 use Plugin;
 
-class Caption4 extends \Slider\Caption
+class Caption4 extends \Slider\Module\Caption
 {
     public string $key = 'caption4';
 

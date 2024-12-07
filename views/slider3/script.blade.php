@@ -13,7 +13,6 @@
 	$(() => {
 		$.each($('.js_slider_title'), function (index, element) {
 			let options = $(this).data('options');
-			let sliderId = $(this).data('id');
 			let sliderWidth = $(this).width();
 			let sliderHeight = Math.ceil(sliderWidth*(parseFloat(options.ratioHeight)/parseFloat(options.ratioWidth)));
 

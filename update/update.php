@@ -1,8 +1,6 @@
 <?php
 namespace Slider\Update;
 
-if(request()->ajax()) return;
-
 use Option;
 use Plugin;
 
@@ -25,7 +23,7 @@ class Updater
 
         if(empty($this->currentVersion))
         {
-            $this->currentVersion = '3.0.0';
+            $this->currentVersion = '3.2.6';
         }
 
         $this->timeline = ['4.0.0'];
@@ -67,7 +65,7 @@ class Updater
                     {
                         $this->update->run();
 
-                        //Option::update('slider_version', $version);
+                        Option::update('slider_version', $version);
                     }
                 }
             }
@@ -77,11 +75,4 @@ class Updater
             Plugin::setCheckUpdate('slider', $this->version);
         }
     }
-}
-
-if(Plugin::getCheckUpdate('slider') !== SLIDER_VERSION)
-{
-    $updater = new Updater();
-
-    $updater->checkForUpdates();
 }
