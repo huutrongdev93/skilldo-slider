@@ -209,7 +209,10 @@ class SliderItem extends \Slider\Module\SliderItem
 
             $item->type = $type;
 
-            $this->caption->setItemId($item->id);
+            if(is_object($this->caption))
+            {
+                $this->caption->setItemId($item->id);
+            }
 
             return Plugin::partial('slider', 'slider3/item', [
                 'item' => $item,
@@ -241,6 +244,11 @@ class SliderCaption extends \Slider\Module\SliderCaption
     public function config(): array
     {
         return $this->caption->config();
+    }
+
+    public function layers(): string
+    {
+        return $this->caption->layers();
     }
 
     public function demo(): string

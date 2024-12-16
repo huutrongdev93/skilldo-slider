@@ -276,6 +276,11 @@ class SliderCaption
         $this->caption->setConfig($config);
     }
 
+    public function layers(): string
+    {
+        return $this->caption->layers();
+    }
+
     public function demo(): string
     {
         return Plugin::partial('slider', 'admin/slider1/captions/caption-demo', [

@@ -16,7 +16,6 @@ class Updater
 
     public function __construct()
     {
-
         $this->version = Plugin::getInfo('slider')['version'];
 
         $this->currentVersion = Option::get('slider_version');

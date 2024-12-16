@@ -1,15 +1,4 @@
 <script>
-    document.querySelectorAll('.js_slider_title').forEach(function(element) {
-        let options = JSON.parse(element.getAttribute('data-options'));
-        let sliderWidth = element.offsetWidth;
-        let sliderHeight = Math.ceil(sliderWidth * (parseFloat(options.ratioHeight) / parseFloat(options.ratioWidth)));
-        let wrapper = element.querySelector('.sliderNoTitleWrapper');
-        if (wrapper) {
-            wrapper.style.height = sliderHeight + 'px';
-        }
-    });
-
-
 	$(() => {
 		$.each($('.js_slider_title'), function (index, element) {
 			let options = $(this).data('options');

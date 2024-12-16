@@ -48,7 +48,7 @@
             'data-bgrepeat' => "no-repeat"
         ])->html() !!}
     @endif
-    @if(!empty($caption))
+    @if(!empty($caption) && method_exists($caption, 'layers'))
         {!! $caption->layers() !!}
     @endif
 
