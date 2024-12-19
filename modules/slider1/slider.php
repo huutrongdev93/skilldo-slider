@@ -48,16 +48,16 @@ class Slider
             $this->item($item);
         }
 
+        $id = uniqid();
+
         Plugin::view('slider', 'slider1/view', [
             'slider'    => $slider,
             'items'     => $this->items,
             'options'   => $options,
+            'id'        => $id
         ]);
 
-        if(!static::$loadScript) {
-            Plugin::view('slider', 'slider1/script');
-            static::$loadScript = true;
-        }
+        Plugin::view('slider', 'slider1/script', ['id' => $id]);
     }
 }
 

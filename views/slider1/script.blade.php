@@ -1,5 +1,5 @@
-<script>
-    document.querySelectorAll('.js_slider_revolution').forEach(function(element) {
+<script async>
+    document.querySelectorAll('.js_slider_revolution_{!! $id !!}').forEach(function(element) {
 
         let options = JSON.parse(element.getAttribute('data-options') || '{}');
 
