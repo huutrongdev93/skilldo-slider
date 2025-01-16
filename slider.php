@@ -6,7 +6,7 @@ const SLIDER_NAME = 'slider';
 
 const SLIDER_PATH = 'views/plugins/'.SLIDER_NAME;
 
-const SLIDER_VERSION = '4.1.1';
+const SLIDER_VERSION = '4.1.2';
 
 class Slider {
 
@@ -30,7 +30,7 @@ class Slider {
 
             $slider->options = (Str::isSerialized($slider->options)) ? unserialize($slider->options) : $slider->options;
 
-            $type = !empty($slider->options['type']) ? $slider->options['type'] : $slider->options;
+            $type = !empty($slider->options['type']) ? $slider->options['type'] :    $slider->options;
 
             if(!empty($type)) {
 
@@ -38,10 +38,27 @@ class Slider {
 
                 if (!empty($sliderClass)) {
 
-                    $items = GalleryItem::gets(Qr::set('group_id', $sliderId)->where('object_type', 'slider')->orderBy('order'));
+                    $items = GalleryItem::gets(Qr::set('group_id', $sliderId)
+                        ->where('object_type', 'slider')
+                        ->orderBy('order'));
 
-                    if (have_posts($items)) {
-                        if(!Device::isGoogleSpeed()) {
+                    if (have_posts($items))
+                    {
+                        if(!Device::isGoogleSpeed())
+                        {
+                            foreach ($items as $key => $item)
+                            {
+                                $metas = GalleryItem::getMeta($item->id, '', false);
+
+                                if(have_posts($metas))
+                                {
+                                    foreach($metas as $metaKey => $metaValue)
+                                    {
+                                        $item->$metaKey = $metaValue;
+                                    }
+                                }
+                            }
+
                             $sliderClass->render($items, $slider, $options);
                         }
                         else {
