@@ -106,16 +106,14 @@ class SliderItem
             else
             {
                 $item->caption_key = 'none';
-
-                $item->transition_key = 'fade';
             }
 
-            if(empty($this->item->transtion_key) || !isset($this->transitions[$this->item->transtion_key]))
+            if(empty($this->item->transition_key) || !isset($this->transitions[$this->item->transition_key]))
             {
-                $this->item->transtion_key = 'fade';
+                $this->item->transition_key = 'fade';
             }
 
-            $this->transition = $this->transitions[$this->item->transtion_key];
+            $this->transition = $this->transitions[$this->item->transition_key];
 
             $transitionConfig = GalleryItem::getMeta($this->item->id, 'transition', true);
 
@@ -202,7 +200,7 @@ class SliderItem
     {
         $this->item->url                = GalleryItem::getMeta($this->item->id, 'url', true);
         $this->item->name               = GalleryItem::getMeta($this->item->id, 'name', true);
-        $this->item->transtion_key      = GalleryItem::getMeta($this->item->id, 'transtion_key', true);
+        $this->item->transition_key     = GalleryItem::getMeta($this->item->id, 'transition_key', true);
         $this->item->caption_key        = GalleryItem::getMeta($this->item->id, 'caption_key', true);
 
         if(!Language::isDefault())

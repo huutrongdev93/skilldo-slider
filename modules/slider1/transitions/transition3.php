@@ -29,7 +29,7 @@ class Transition3
         {
             foreach($config as $key => $configValue)
             {
-                if(!is_array($this->config[$key]))
+                if(!isset($this->config[$key]))
                 {
                     continue;
                 }

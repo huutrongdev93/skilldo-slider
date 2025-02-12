@@ -6,7 +6,7 @@ const SLIDER_NAME = 'slider';
 
 const SLIDER_PATH = 'views/plugins/'.SLIDER_NAME;
 
-const SLIDER_VERSION = '4.1.2';
+const SLIDER_VERSION = '4.1.3';
 
 class Slider {
 
