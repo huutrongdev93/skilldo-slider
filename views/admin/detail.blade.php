@@ -6,7 +6,7 @@
     </ol>
 </nav>
 <div class="ui-title-bar__group">
-    <h1 class="ui-title-bar__title mb-3">Slider {!! $slider->name !!}</h1>
+    <h1 class="ui-title-bar__title text-3xl mb-3">Slider {!! $slider->name !!}</h1>
     <a href="{!! Url::admin('plugins/slider') !!}">{{ trans('slider.detail.back') }}</a>
 </div>
 <div class="box mb-2 slider-detail" data-slider-id="{!! $slider->id !!}" data-slider-type="{!! $slider->options !!}">

@@ -6,7 +6,7 @@
     </ol>
 </nav>
 <div class="ui-title-bar__group">
-    <h1 class="ui-title-bar__title">Slider</h1>
+    <h1 class="ui-title-bar__title text-3xl">Slider</h1>
 </div>
 
 <div class="box">
